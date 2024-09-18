@@ -20,22 +20,27 @@ public class Match {
             Move move = new Move(position, '♡');
             if (WinCheck.isWin(board, move)) {
                 playerWin = true;
-                if (!KeepPlaying.keepPlaying(move.gamecharacter)) {
+                if (!KeepPlaying.keepPlaying()) {
                     break;
                 }
             }
-            Position computerPosition = Computer.getRandomMove(board);
+            Position computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
             Move computermove = new Move(computerPosition, '¤');
             board.print();
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
-                if (!KeepPlaying.keepPlaying(move.gamecharacter)) {
+                if (!KeepPlaying.keepPlaying()) {
                     break;
                 }
             }
             if (board.isFull()) {
-                System.out.println("Game Over");
+                if (!KeepPlaying.keepPlaying()) {
+                    System.out.println("Game Over");
+                    break;
+                }
+
+
             }
 
             rounds++;

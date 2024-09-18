@@ -28,4 +28,8 @@ public class Field {
     public boolean isPlayer() {
         return this.gamecharacter == '♡';
     }
+
+    public boolean isComputer() {
+        return this.gamecharacter == '¤';
+    }
 }

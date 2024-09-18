@@ -21,8 +21,8 @@ public class Computer {
     static ArrayList<Field> columnStrateg = new ArrayList<>();
     static ArrayList<Field> rowStrateg = new ArrayList<>();
     static ArrayList<Field> diagonalStrateg = new ArrayList<>();
-    static ArrayList<Field> winBlock = new ArrayList<>();
-    static ArrayList<Field> startMove = new ArrayList<>();
+    static ArrayList<Field> winsstrateg = new ArrayList<>();
+    static ArrayList<Field> winStrategComputer = new ArrayList<>();
     ;
 
 
@@ -64,7 +64,9 @@ public class Computer {
             }
         }
 
+
     }
+
 
     public static void columnStrategs(Board board) {
         ArrayList<Field> toRemove = new ArrayList<>();
@@ -160,28 +162,34 @@ public class Computer {
 
         };
 
-        for (Field field : winBlock) {
+        for (Field field : winsstrateg) {
             if (!field.isEmpty()) {
                 toRemove.add(field);
             }
         }
         if (!toRemove.isEmpty()) {
-            winBlock.removeAll(toRemove);
+            winsstrateg.removeAll(toRemove);
         }
 
 
-        if (winBlock.isEmpty()) {
+        if (winsstrateg.isEmpty()) {
             for (Field[] field : winsstrategs) {
                 for (Field field2 : field) {
+                    for (Field field3 : field) {
+                        for (Field field4 : field) {
+                            if (winsstrateg.size() < 3) {
+                                if (field4 != field2 && field3 != field4 && field2 != field3) {
+                                    if (field2.isEmpty() && field3.isEmpty() && field4.isEmpty()) {
+                                        winsstrateg.add(field2);
+                                        winsstrateg.add(field3);
+                                        winsstrateg.add(field4);
+                                        break;
+                                    }
+                                }
 
-                    if (winBlock.size() < 3) {
-                        if (field2.isEmpty()) {
-                            winBlock.add(field2);
-                            break;
+                            }
                         }
-
                     }
-
                 }
             }
         }
@@ -189,144 +197,105 @@ public class Computer {
 
     }
 
-    public static void startMoves(Board board) {
-        Field[][] startMoves = {{board.getRows().get(position1.getRow()).fields.get(position1.getColumn())},
-                {board.getRows().get(position3.getRow()).fields.get(position3.getColumn())},
-                {board.getRows().get(position5.getRow()).fields.get(position5.getColumn())},
-                {board.getRows().get(position7.getRow()).fields.get(position7.getColumn())},
-                {board.getRows().get(position9.getRow()).fields.get(position9.getColumn())},
-
+    public static void winStrategsComputer(Board board) {
+        ArrayList<Field> toRemove = new ArrayList<>();
+        Field[][] winStrategsComputer = {{board.getRows().get(position1.getRow()).fields.get(position1.getColumn()), board.getRows().get(position2.getRow()).fields.get(position2.getColumn()), board.getRows().get(position3.getRow()).fields.get(position3.getColumn())},
+                {board.getRows().get(position4.getRow()).fields.get(position4.getColumn()), board.getRows().get(position5.getRow()).fields.get(position5.getColumn()), board.getRows().get(position6.getRow()).fields.get(position6.getColumn())},
+                {board.getRows().get(position7.getRow()).fields.get(position7.getColumn()), board.getRows().get(position8.getRow()).fields.get(position8.getColumn()), board.getRows().get(position9.getRow()).fields.get(position9.getColumn())},
+                {board.getRows().get(position1.getRow()).fields.get(position1.getColumn()), board.getRows().get(position5.getRow()).fields.get(position5.getColumn()), board.getRows().get(position9.getRow()).fields.get(position9.getColumn())},
+                {board.getRows().get(position3.getRow()).fields.get(position3.getColumn()), board.getRows().get(position5.getRow()).fields.get(position5.getColumn()), board.getRows().get(position7.getRow()).fields.get(position7.getColumn())},
+                {board.getRows().get(position1.getRow()).fields.get(position1.getColumn()), board.getRows().get(position4.getRow()).fields.get(position4.getColumn()), board.getRows().get(position7.getRow()).fields.get(position7.getColumn())},
+                {board.getRows().get(position2.getRow()).fields.get(position2.getColumn()), board.getRows().get(position5.getRow()).fields.get(position5.getColumn()), board.getRows().get(position8.getRow()).fields.get(position8.getColumn())},
+                {board.getRows().get(position3.getRow()).fields.get(position3.getColumn()), board.getRows().get(position6.getRow()).fields.get(position6.getColumn()), board.getRows().get(position9.getRow()).fields.get(position9.getColumn())},
         };
 
-        for (Field[] field : startMoves) {
-            for (Field field2 : field) {
-                if (field2.isEmpty()) {
-                    startMove.add(field2);
+        for (Field field : winStrategComputer) {
+            if (!field.isEmpty()) {
+                toRemove.add(field);
+            }
+        }
+        if (!toRemove.isEmpty()) {
+            winStrategComputer.removeAll(toRemove);
+        }
+
+        if (winStrategComputer.isEmpty()) {
+            for (Field[] field : winStrategsComputer) {
+                for (Field field2 : field) {
+                    for (Field field3 : field) {
+                        for (Field field4 : field) {
+                            if (winStrategComputer.size() < 1) {
+                                if (field4 != field2 && field3 != field4 && field2 != field3) {
+                                    if (field2.isEmpty() && field3.isComputer() && field4.isComputer()) {
+                                        winStrategComputer.add(field2);
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
                 }
             }
         }
 
-    }
-
-    public static void playMoveCheck(Board board) {
-
 
     }
 
-    public static Position getRandomMove(Board board) {
+
+    public static Position getComputerMovement(Board board) {
         Random random = new Random();
-
-
-        /*ArrayList<Field> freeFields = new ArrayList<>();
-
-        for (Row row : board.getRows()) {
-            for (Field field : row.getFields()) {
-                if (field.isEmpty()) {
-                    freeFields.add(field);
-                }
-            }
-        }*/
-        if (Match.rounds == 0) {
-            startMoves(board);
-        }
-        winsstrategs(board);
-        columnStrategs(board);
         rowStrategs(board);
+        columnStrategs(board);
         diagonalStrategs(board);
-
-        int index2 = random.nextInt(winBlock.size());
-        Field freeField = winBlock.get(index2);
-        //Field freeField = winBlock.getFirst();
+        winsstrategs(board);
+        winStrategsComputer(board);
 
 
+        if (board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isEmpty()) {
+            return position5;
+        }
 
-       /* if (Match.rounds == 0) {
-            if (board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isEmpty()) {
-                board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).setGameCharacter('¤');
-            }*/
-        if (Match.rounds == 0) {
-            if (!startMove.isEmpty()) {
-                int index1 = random.nextInt(startMove.size());
-                Field freeFieldstart = startMove.getLast();
-                return freeFieldstart.getPosition();
-            }
+
+        if (!winStrategComputer.isEmpty()) {
+            int index1 = random.nextInt(winStrategComputer.size());
+            Field freeField5 = winStrategComputer.getLast();
+            System.out.println("computer will gewinnen");
+            return freeField5.getPosition();
         }
 
         if (!rowStrateg.isEmpty()) {
+            int index = random.nextInt(rowStrateg.size());
+            Field freeField3 = rowStrateg.getFirst();
+            System.out.println("row");
+            return freeField3.getPosition();
 
-
-            //
-            //
-            if (board.getRows().get(position2.getRow()).fields.get(position2.getColumn()).isPlayer()
-                    && board.getRows().get(position1.getRow()).fields.get(position1.getColumn()).isPlayer()
-                    || board.getRows().get(position8.getRow()).fields.get(position8.getColumn()).isPlayer()
-                    && board.getRows().get(position7.getRow()).fields.get(position7.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position4.getRow()).fields.get(position4.getColumn()).isPlayer()
-                    || board.getRows().get(position2.getRow()).fields.get(position2.getColumn()).isPlayer()
-                    && board.getRows().get(position3.getRow()).fields.get(position3.getColumn()).isPlayer()
-                    || board.getRows().get(position8.getRow()).fields.get(position8.getColumn()).isPlayer()
-                    && board.getRows().get(position9.getRow()).fields.get(position9.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position6.getRow()).fields.get(position6.getColumn()).isPlayer()) {
-                int index = random.nextInt(rowStrateg.size());
-                Field freeField3 = rowStrateg.get(index);
-                System.out.println("row");
-                return freeField3.getPosition();
-
-            }
-        }
-        if (!columnStrateg.isEmpty()) {
-
-
-            //columnStrateg.stream().filter(position5 == position7)
-            //System.out.println("column");
-
-            //return freeField2.getPosition();
-            if (board.getRows().get(position4.getRow()).fields.get(position4.getColumn()).isPlayer()
-                    && board.getRows().get(position1.getRow()).fields.get(position1.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position2.getRow()).fields.get(position2.getColumn()).isPlayer()
-                    || board.getRows().get(position6.getRow()).fields.get(position6.getColumn()).isPlayer()
-                    && board.getRows().get(position3.getRow()).fields.get(position3.getColumn()).isPlayer()
-                    || board.getRows().get(position4.getRow()).fields.get(position4.getColumn()).isPlayer()
-                    && board.getRows().get(position7.getRow()).fields.get(position7.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position8.getRow()).fields.get(position8.getColumn()).isPlayer()
-                    || board.getRows().get(position6.getRow()).fields.get(position6.getColumn()).isPlayer()
-                    && board.getRows().get(position9.getRow()).fields.get(position9.getColumn()).isPlayer()) {
-                System.out.println("column");
-                //int index = random.nextInt(columnStrateg.size());
-                Field freeField2 = columnStrateg.getFirst();
-                //columnStrateg.stream().filter(position5 == position7)
-                return freeField2.getPosition();
-
-            }
         }
         if (!diagonalStrateg.isEmpty()) {
-            //System.out.println("diagonal");
+            int index = random.nextInt(diagonalStrateg.size());
+            Field freeField1 = diagonalStrateg.getFirst();
+            System.out.println("diagonal");
+            return freeField1.getPosition();
 
-            if (board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position1.getRow()).fields.get(position1.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position3.getRow()).fields.get(position3.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position7.getRow()).fields.get(position7.getColumn()).isPlayer()
-                    || board.getRows().get(position5.getRow()).fields.get(position5.getColumn()).isPlayer()
-                    && board.getRows().get(position9.getRow()).fields.get(position9.getColumn()).isPlayer()) {
 
-                int index = random.nextInt(diagonalStrateg.size());
-                Field freeField1 = diagonalStrateg.getFirst();
-                System.out.println("diagonal");
-                return freeField1.getPosition();
+        }
+        if (!columnStrateg.isEmpty()) {
+            int index = random.nextInt(columnStrateg.size());
+            Field freeField2 = columnStrateg.getFirst();
+            System.out.println("column");
+            return freeField2.getPosition();
 
+        }
+        if (winsstrateg.isEmpty()) {
+            System.out.println("★·.·´¯`·.·★unentschieden★·.·`¯´·.·★");
+            if (!KeepPlaying.keepPlaying()) {
+                System.out.println("Bye Bye");
             }
         }
-        System.out.println("winblock");
+        int index2 = random.nextInt(winsstrateg.size());
+        Field freeField = winsstrateg.getFirst();
+        System.out.println("winverfolgung");
         return freeField.getPosition();
 
-
-        //return freeField.getPosition();
     }
 
 

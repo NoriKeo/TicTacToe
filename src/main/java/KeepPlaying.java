@@ -1,7 +1,7 @@
 public class KeepPlaying {
 
 
-    public static boolean keepPlaying(char gamecharacter) {
+    public static boolean keepPlaying() {
         //rounds = rounds - rounds;
 
         //¤

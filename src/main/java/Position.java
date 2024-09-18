@@ -31,4 +31,14 @@ public class Position {
         this.index = index;
         return index;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return index == position.index;
+    }
+
+
 }
