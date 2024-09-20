@@ -1,7 +1,7 @@
 public class Field {
 
-    char gamecharacter;
-    Position position;
+    /*default*/ char gamecharacter;
+    /*default*/ Position position;
 
     public Field(Position position) {
         this.position = position;

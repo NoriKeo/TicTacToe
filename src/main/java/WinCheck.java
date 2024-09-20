@@ -1,20 +1,23 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class WinCheck {
 
 
-    public static boolean isWin(Board board, Move move) {
+    public WinCheck() {
+    }
+
+    public static boolean isWin(Board board, GamePlayMove move) {
 
 
         return rowwin(board, move) || columnwin(board, move) || diagonalWin(board, move);
     }
 
-    public static boolean rowwin(Board board, Move move) {
-        Position position = move.getPosition();
+    public static boolean rowwin(Board board, GamePlayMove move) {
+        Position position;
+        position = move.getPosition();
 
-        ArrayList<Position> row = new ArrayList<>();
+        List<Position> row = new ArrayList<>();
         for (Field field : board.getRows().get(position.getRow()).getFields()) {
             row.add(field.getPosition());
         }
@@ -22,11 +25,11 @@ public class WinCheck {
         return gamecharactercheck(row, move.getGamecharacter(), board);
     }
 
-    public static boolean columnwin(Board board, Move move) {
+    public static boolean columnwin(Board board, GamePlayMove move) {
         Position position = move.getPosition();
-        ArrayList<Position> column = new ArrayList<>();
+        List<Position> column = new ArrayList<>();
 
-        for (Row row : board.getRows()) {
+        for (RowFromBoard row : board.getRows()) {
             column.add(row.getFields().get(position.getColumn()).getPosition());
         }
 
@@ -34,22 +37,14 @@ public class WinCheck {
 
     }
 
-    public static boolean diagonalWin(Board board, Move move) {
-        Position position = move.getPosition();
+    public static boolean diagonalWin(Board board, GamePlayMove move) {
+
 
         List<Position> diagonatopleft = List.of(new Position(1), new Position(5), new Position(9));
         List<Position> diagonatopright = List.of(new Position(3), new Position(5), new Position(7));
 
 
-        if (gamecharactercheck(diagonatopleft, move.gamecharacter, board)) {
-            return true;
-        }
-        if (gamecharactercheck(diagonatopright, move.gamecharacter, board)) {
-            return true;
-        }
-
-
-        return false;
+        return gamecharactercheck(diagonatopright, move.gamecharacter, board) || gamecharactercheck(diagonatopleft, move.gamecharacter, board);
 
 
     }

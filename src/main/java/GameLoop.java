@@ -5,7 +5,7 @@ public class GameLoop {
         while (true) {
             Match match = new Match();
             match.start();
-            break;
+            //break;
         }
     }
 }

@@ -1,5 +1,9 @@
+import java.util.Set;
+
 public class KeepPlaying {
 
+
+    private static final Set<String> INPUTS = Set.of("Ja", "ja", "Yes");
 
     public static boolean keepPlaying() {
         //rounds = rounds - rounds;
@@ -20,10 +24,10 @@ public class KeepPlaying {
 
 
         System.out.println("(っ◔◡◔)っ ♥ Möchtest du weiter spielen ♥");
-        String input = Player.sc.nextLine();
+        String input = Player.scScanner.nextLine();
 
 
-        if (input.equals("Ja") || input.equals("ja") || input.equals("Yes")) {
+        if (INPUTS.contains(input)) {
             GameLoop gameLoop = new GameLoop();
             System.out.println("˜”*°• Viel Spaß •°*”˜");
             Match.rounds = 0;

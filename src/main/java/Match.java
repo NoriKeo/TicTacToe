@@ -1,10 +1,10 @@
 public class Match {
-    Board board;
-    static int scorex;
-    static int scorey;
-    static boolean playerWin = false;
-    static boolean computerWin = false;
-    static int rounds;
+    /*default*/ Board board;
+    /*default*/static int scorex;
+    /*default*/static int scorey;
+    /*default*/static boolean playerWin = false;
+    /*default*/static boolean computerWin = false;
+    /*default*/static int rounds;
 
     public Match() {
         this.board = new Board();
@@ -17,7 +17,7 @@ public class Match {
             Position position = new Position(input);
             board.getRows().get(position.getRow()).getFields().get(position.getColumn()).setGameCharacter('♡');
             board.print();
-            Move move = new Move(position, '♡');
+            GamePlayMove move = new GamePlayMove(position, '♡');
             if (WinCheck.isWin(board, move)) {
                 playerWin = true;
                 if (!KeepPlaying.keepPlaying()) {
@@ -26,7 +26,7 @@ public class Match {
             }
             Position computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
-            Move computermove = new Move(computerPosition, '¤');
+            GamePlayMove computermove = new GamePlayMove(computerPosition, '¤');
             board.print();
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
@@ -34,14 +34,13 @@ public class Match {
                     break;
                 }
             }
-            if (board.isFull()) {
-                if (!KeepPlaying.keepPlaying()) {
+
+
+            if (board.isFull() && !KeepPlaying.keepPlaying()) {
                     System.out.println("Game Over");
                     break;
                 }
 
-
-            }
 
             rounds++;
         } while (!board.isFull());

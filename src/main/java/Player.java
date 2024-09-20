@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Player {
 
-    static Scanner sc = new Scanner(System.in);
+    /*default*/static Scanner scScanner = new Scanner(System.in);
 
 
     //'♡'
@@ -13,15 +13,15 @@ public class Player {
 
         do {
             System.out.println("♥ Gebe eine Zahl von eins bis neun ein ♥");
-            String input = sc.nextLine();
+            String input = scScanner.nextLine();
             input2 = Integer.parseInt(input);
         } while (!isvalid(input2));
 
 
         if (!freefield(board, input2)) {
             System.out.println("(¯`·.¸¸.-> °ºDas Feld ist leider schon vergebenº° >-.¸¸.·`¯(");
-            String input = sc.nextLine();
-            input2 = Integer.parseInt(input);
+            //String input = sc.nextLine();
+            //input2 = Integer.parseInt(input);
             input2 = askInput(board);
 
         }
@@ -35,9 +35,9 @@ public class Player {
     }
 
     public static boolean freefield(Board board, int input2) {
-        //Position position = move.getPosition();
+
         List<Position> freeFields = new ArrayList<>();
-        for (Row row : board.getRows()) {
+        for (RowFromBoard row : board.getRows()) {
             for (Field field : row.getFields()) {
                 if (field.isEmpty()) {
                     freeFields.add(field.getPosition());

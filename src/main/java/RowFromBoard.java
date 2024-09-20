@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.List;
 
-public class Row {
-    ArrayList<Field> fields = new ArrayList<>();
+public class RowFromBoard {
+    /*default*/ List<Field> fields = new ArrayList<>();
 
-    public Row(int row) {
+    public RowFromBoard(int row) {
 
         for (int column = 0; column < 3; column++) {
             Position position = new Position(row, column);
@@ -11,7 +12,7 @@ public class Row {
         }
     }
 
-    public ArrayList<Field> getFields() {
+    public List<Field> getFields() {
         return fields;
     }
 
@@ -27,6 +28,10 @@ public class Row {
             }
         }
         return true;
+    }
+
+    public Field getField(Field field) {
+        return fields.get(fields.indexOf(field));
     }
 
 

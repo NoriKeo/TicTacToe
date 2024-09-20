@@ -1,8 +1,8 @@
-public class Move {
-    Position position;
-    char gamecharacter;
+public class GamePlayMove {
+    /*default*/ Position position;
+    /*default*/ char gamecharacter;
 
-    public Move(Position position, char gamecharacter) {
+    public GamePlayMove(Position position, char gamecharacter) {
         this.position = position;
         this.gamecharacter = gamecharacter;
     }

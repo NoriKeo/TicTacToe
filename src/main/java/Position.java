@@ -1,7 +1,7 @@
 public class Position {
-    int row;
-    int column;
-    int index;
+    /*default*/ int row;
+    /*default*/ int column;
+    /*default*/ int index;
 
     public Position(int row, int column) {
         this.row = row;
@@ -27,16 +27,20 @@ public class Position {
         return index;
     }
 
-    public int setIndex(int index) {
+    /*public int setIndex(int index) {
         this.index = index;
         return index;
-    }
+    }*/
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Position position = (Position) o;
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Position position = (Position) object;
         return index == position.index;
     }
 
