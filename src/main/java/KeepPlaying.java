@@ -10,19 +10,8 @@ public class KeepPlaying {
 
         //¤
 
-        if (Match.playerWin) {
-            Match.scorex++;
-            System.out.println("Der Gewinner ist ♡ mit einem score von " + Match.scorex);
-            Match.playerWin = false;
-
-        }
-        if (Match.computerWin) {
-            Match.scorey++;
-            System.out.println("Der Gewinner ist ¤ mit einem score von " + Match.scorey);
-            Match.computerWin = false;
-        }
-
-
+        Match.match++;
+        Score.score();
         System.out.println("(っ◔◡◔)っ ♥ Möchtest du weiter spielen ♥");
         String input = Player.scScanner.nextLine();
 
@@ -38,6 +27,10 @@ public class KeepPlaying {
 
         System.out.println("╰☆☆Vielen Dank fürs Spielen☆☆╮");
         return false;
+    }
+
+    public static void scoreboard() {
+        Score.score();
     }
 
 

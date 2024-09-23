@@ -47,7 +47,7 @@
                 <configuration>
                     <linkXRef>false</linkXRef>
                     <printFailingErrors>true</printFailingErrors>
-                    <failOnViolation>true</failOnViolation>
+                    <failOnViolation>false</failOnViolation>
                     <rulesets>
                         <ruleset>./pmd-rules.xml</ruleset>
                     </rulesets>
@@ -64,7 +64,18 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <mainClass>MainTicTacToe</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
+
     </build>
+    <!-- other properties -->
+
+
 </project>

@@ -1,10 +1,10 @@
 public class Match {
     /*default*/ Board board;
-    /*default*/static int scorex;
-    /*default*/static int scorey;
+    /*default*/
     /*default*/static boolean playerWin = false;
     /*default*/static boolean computerWin = false;
     /*default*/static int rounds;
+    static int match;
 
     public Match() {
         this.board = new Board();
@@ -23,6 +23,7 @@ public class Match {
                 if (!KeepPlaying.keepPlaying()) {
                     break;
                 }
+
             }
             Position computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');

@@ -4,8 +4,6 @@ import java.util.List;
 public class WinCheck {
 
 
-    public WinCheck() {
-    }
 
     public static boolean isWin(Board board, GamePlayMove move) {
 

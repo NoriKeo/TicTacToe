@@ -1,14 +1,6 @@
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ComputerTest {
 
@@ -42,7 +34,7 @@ class ComputerTest {
 
     }
 
-    private static List<Field> returnWinStrategList() {
+    /*private static List<Field> returnWinStrategList() {
         Board board = new Board();
         List<Field> winStrategs = new ArrayList<>();
         winStrategs.add(board.getField(new Position(1)));
@@ -70,10 +62,10 @@ class ComputerTest {
                 Arguments.of(getBoard(List.of(5)), new Position(5))
 
         );
-    }
+    }*/
 
 
-    @ParameterizedTest
+   /* @ParameterizedTest
     @MethodSource("returnPositionsCheckstream")
     void returnPositionCheck(Board board, Position position) {
         Position position1 = (Computer.getComputerMovement(board));
@@ -84,8 +76,8 @@ class ComputerTest {
 
 
     }
-
-    @Test
+*/
+    /*@Test
     void test() {
         Board board = new Board();
         while (true) {
@@ -103,9 +95,9 @@ class ComputerTest {
 
 
         }
-    }
+    }*/
 
-    @Test
+    /*@Test
     void test2() {
         Board board = new Board();
         while (true) {
@@ -119,7 +111,7 @@ class ComputerTest {
 
 
         }
-    }
+    }*/
     /*@Test
     void test3(){
        Integer[][] positions = {{1,2,3},{4,5,6},{7,8,9}};

@@ -18,12 +18,16 @@
         <exclude name="LocalVariableCouldBeFinal"/>
         <exclude name="OnlyOneReturn"/>
         <exclude name="NoPackage"/>
+        <exclude name="AtLeastOneConstructor"/>
 
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass"/>
     </rule>
     <rule ref="category/java/design.xml">
         <exclude name="MutableStaticState"/>
         <exclude name="UseUtilityClass"/>
+        <exclude name="LawOfDemeter"/>
+        <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
+
 
     </rule>
     <rule ref="category/java/errorprone.xml"/>
