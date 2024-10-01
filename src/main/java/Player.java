@@ -1,21 +1,35 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Player {
 
     /*default*/static Scanner scScanner = new Scanner(System.in);
 
+    private static final Set<String> INPUTS = Set.of("i", "I", "info", "INFO", "Game", "game", "g", "G", "Score", "score", "s", "S");
 
     //'♡'
-    public static int askInput(Board board) {
-        int input2;
 
-        do {
-            System.out.println("♥ Gebe eine Zahl von eins bis neun ein ♥");
-            String input = scScanner.nextLine();
-            input2 = Integer.parseInt(input);
-        } while (!isvalid(input2));
+
+    public static int askInput(Board board) {
+        int input2 = 0;
+
+
+        String input;
+        System.out.println("♥ Gebe eine Zahl ein oder i für Info♥");
+        System.out.println("♥ Gebe eine Zahl von eins bis neun ein ♥");
+        input = scScanner.nextLine();
+        if (INPUTS.contains(input)) {
+            Infofield.getInstance().info();
+        }
+        if (!INPUTS.contains(input)) {
+            do {
+                input2 = Integer.parseInt(input);
+            } while (!isvalid(input2));
+            return input2;
+        }
+
 
 
         if (!freefield(board, input2)) {
@@ -27,6 +41,11 @@ public class Player {
         }
 
         return input2;
+
+    }
+
+    public static void player(Board board) {
+
 
     }
 

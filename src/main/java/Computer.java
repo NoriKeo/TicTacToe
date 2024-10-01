@@ -11,6 +11,8 @@ public class Computer {
 
     }
 
+    static boolean draw = false;
+
 
     public static List<Field> rowStrategy(Board board) {
         /*default*/
@@ -233,8 +235,9 @@ public class Computer {
 
         }
         if (winsStrategy(board).isEmpty()) {
-            System.out.println("★·.·´¯`·.·★unentschieden★·.·`¯´·.·★");
-            if (!KeepPlaying.keepPlaying()) {
+            System.out.println("unentschiden");
+            draw = true;
+            if (!KeepPlaying.keepPlaying(board)) {
                 System.out.println("Bye Bye");
             }
         }

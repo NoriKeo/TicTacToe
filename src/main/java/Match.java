@@ -1,11 +1,16 @@
 public class Match {
-    /*default*/ Board board;
+    /*default*/ static Board board;
     /*default*/
     /*default*/static boolean playerWin = false;
     /*default*/static boolean computerWin = false;
     /*default*/static int rounds;
+    ScoreBoard scoreBoard = new ScoreBoard();
     static int match;
-
+    static Position position;
+    static int input;
+    static long t1;
+    static long t2;
+    static Position computerPosition;
     public Match() {
         this.board = new Board();
     }
@@ -13,31 +18,42 @@ public class Match {
     public void start() {
         board.print();
         do {
-            int input = Player.askInput(board);
-            Position position = new Position(input);
+            t1 = System.currentTimeMillis();
+            input = Player.askInput(board);
+            position = new Position(input);
             board.getRows().get(position.getRow()).getFields().get(position.getColumn()).setGameCharacter('♡');
             board.print();
             GamePlayMove move = new GamePlayMove(position, '♡');
+            if (!WinCheck.isWin(board, move)) {
+                scoreBoard.safeGamePlayPlayer();
+            }
             if (WinCheck.isWin(board, move)) {
+                scoreBoard.safeGamePlayPlayer();
                 playerWin = true;
-                if (!KeepPlaying.keepPlaying()) {
+                t2 = System.currentTimeMillis();
+                if (!KeepPlaying.keepPlaying(board)) {
                     break;
                 }
 
             }
-            Position computerPosition = Computer.getComputerMovement(board);
+            computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
             GamePlayMove computermove = new GamePlayMove(computerPosition, '¤');
             board.print();
+            if (!WinCheck.isWin(board, computermove)) {
+                scoreBoard.safeGamePlayComputer();
+            }
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
-                if (!KeepPlaying.keepPlaying()) {
+                scoreBoard.safeGamePlayComputer();
+                t2 = System.currentTimeMillis();
+                if (!KeepPlaying.keepPlaying(board)) {
                     break;
                 }
             }
 
 
-            if (board.isFull() && !KeepPlaying.keepPlaying()) {
+            if (board.isFull() && !KeepPlaying.keepPlaying(board)) {
                     System.out.println("Game Over");
                     break;
                 }
@@ -47,7 +63,14 @@ public class Match {
         } while (!board.isFull());
 
 
+
     }
 
+    public static Board getBoard() {
+        return board;
+    }
 
+    public static void setBoard(Board board) {
+        Match.board = board;
+    }
 }

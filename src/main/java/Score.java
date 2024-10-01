@@ -1,67 +1,73 @@
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Scanner;
+
 
 public class Score {
 
     /*default*/static int scorex;
     /*default*/static int scorey;
-    static PrintWriter pWriter = null;
-    static String s = "Score.txt";
+    /*default*/static PrintWriter pWriter = null;
+    static int draw;
+    /*default*/ //static String s = "Score.txt";
+    static File s = new File("Score.txt");
+    BufferedWriter writer;
 
-
-    static Path path = Paths.get(s);
-    static Scanner scanner;
-
-    static {
+    {
         try {
-            scanner = new Scanner(path);
+            writer = new BufferedWriter(new FileWriter(s));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    /*static FileInputStream fis = new FileInputStream(file);
-    static InputStreamReader isr = new InputStreamReader(fis);
-    static BufferedReader br = new BufferedReader(isr);*/
 
-    public static void score() {
+
+    public static void score(Board board) {
         if (Match.playerWin) {
             scorex++;
         }
         if (Match.computerWin) {
             scorey++;
         }
+        if (Computer.draw) {
+            draw++;
+        }
+
+
         FileInputStream fis1;
 
-        {
+
             try {
                 fis1 = new FileInputStream(s);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        }
+
         InputStreamReader isr1 = new InputStreamReader(fis1);
         BufferedReader br2 = new BufferedReader(isr1);
         String x;
         String y;
+        String d;
         try {
             x = br2.readLine();//System.out.println(x);
             y = br2.readLine();//System.out.println(y);
+            d = br2.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("matches " + Match.match);
+
         if (Match.match == 1) {
             int nummer = Integer.parseInt(x);
             scorex = scorex + nummer;
             int nummer2 = Integer.parseInt(y);
             scorey = scorey + nummer2;
+            int nummer3 = Integer.parseInt(d);
+            draw = draw + nummer3;
         }
+
         try {
             pWriter = new PrintWriter(new FileWriter(s));
             pWriter.println(scorex);
             pWriter.println(scorey);
+            pWriter.println(draw);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } finally {
@@ -86,14 +92,12 @@ public class Score {
         BufferedReader br = new BufferedReader(isr);
         String line;
         String line2;
+        String line3;
 
         try {
-            if (((line = br.readLine()) != null)) {
-                System.out.println(line);
-            }
-            if (((line2 = br.readLine()) != null)) {
-                System.out.println(line2);
-            }
+            line = br.readLine();
+            line2 = br.readLine();
+            line3 = br.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -101,13 +105,29 @@ public class Score {
         if (Match.playerWin) {
 
             System.out.println("Der Gewinner ist ♡ mit einem score von " + line);
+            System.out.println("Der score von ¤ ist " + line2);
             Match.playerWin = false;
 
         }
         if (Match.computerWin) {
 
             System.out.println("Der Gewinner ist ¤ mit einem score von " + line2);
+            System.out.println("Der scorer von ♡ ist " + line);
             Match.computerWin = false;
+        }
+        if (Computer.winsStrategy(board).isEmpty()) {
+            System.out.println("★·.·´¯`·.·★unentschieden★·.·`¯´·.·★");
+            System.out.println("es steht zum " + line3 + " unentscheiden");
+            System.out.println("Der scorer von ♡ ist " + line);
+            System.out.println("Der score von ¤ ist " + line2);
+
+        }
+        if (Infofield.scoreprint) {
+            System.out.println("(¯´•._.•Score•._.•´¯(");
+            System.out.println("Der scorer von ♡ ist " + line);
+            System.out.println("Der score von ¤ ist " + line2);
+            System.out.println("es gab " + line3 + " ein unentscheiden");
+            System.out.println("♥ ----------------------------------- ♥");
         }
 
         //br.close();

@@ -4,6 +4,7 @@ import java.util.List;
 
 
 public class Board {
+
     /*default*/ List<RowFromBoard> rows = new ArrayList<>();
 
     public Board() {
@@ -40,4 +41,6 @@ public class Board {
     public Field getField(Position position) {
         return rows.get(position.getRow()).getFields().get(position.getColumn());
     }
+
+
 }
