@@ -1,9 +1,9 @@
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -11,9 +11,11 @@ public class TimeSafe {
 
     static PrintWriter fileWriter = null;
     static File s = new File("timesafe.json");
+    static JsonReader jsonReader;
+    static JsonObject jsonObject;
+    static JsonObject timeread;
 
-
-    public static void timeSafer() throws IOException {
+    public static void writer() throws IOException {
 
         JSONObject object;
 
@@ -35,6 +37,31 @@ public class TimeSafe {
 
 
         fileWriter.close();
+    }
+
+    public static void read() throws IOException {
+        if (s.exists() && s.length() > 0) {
+            String content = new String(Files.readAllBytes(Paths.get("timesafe.json"))).trim();
+            InputStream is = new ByteArrayInputStream(content.getBytes());
+            jsonReader = Json.createReader(is);
+            jsonObject = jsonReader.readObject();
+            is.close();
+            jsonReader.close();
+            if (content.startsWith("{")) {
+                timeread = jsonObject.getJsonObject("time " + Match.match);
+            } else {
+                timeread = Json.createObjectBuilder().build();
+            }
+        } else {
+            timeread = Json.createObjectBuilder().build();
+        }
+
+        System.out.println(jsonObject);
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        read();
     }
 
 

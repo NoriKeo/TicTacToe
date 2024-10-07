@@ -11,17 +11,12 @@ public class KeepPlaying {
     private static final Set<String> INPUTS = Set.of("Ja", "ja", "Yes");
     static long time;
     static long seconds;
-    static long seconds3;
-    static long seconds4;
+
 
 
     public static boolean keepPlaying(Board board) {
-        //rounds = rounds - rounds;
-
-        //¤
-        ScoreBoard scoreBoard = new ScoreBoard();
         Match.match++;
-        Score.score(board);
+        ScoreBoardPrinter.getInstance().getPrintetScore(board);
         timeStemp();
         try {
             JsonWrite.jsonWriter();
@@ -38,9 +33,9 @@ public class KeepPlaying {
             GameLoop gameLoop = new GameLoop();
             System.out.println("˜”*°• Viel Spaß •°*”˜");
             Match.rounds = 0;
-            ScoreBoard.playerFields = new ArrayList<>();
+            BoardhistoryArray.playerFields = new ArrayList<>();
             ;
-            ScoreBoard.computerFields = new ArrayList<>();
+            BoardhistoryArray.computerFields = new ArrayList<>();
             ;
             gameLoop.start();
             return true;
@@ -60,7 +55,7 @@ public class KeepPlaying {
         System.out.println(now.format(df));
         System.out.println("Dieses Match wurde in einer zeit von " + seconds7 + " sekunden bestritten");
         try {
-            TimeSafe.timeSafer();
+            TimeSafe.writer();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

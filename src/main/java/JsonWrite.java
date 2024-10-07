@@ -42,14 +42,14 @@ public class JsonWrite {
             jsonArray2 = new JSONArray();
         }
 
-        ScoreBoard scoreBoard = new ScoreBoard();
+        BoardhistoryArray scoreBoard = new BoardhistoryArray();
 
-        for (int playerFields : ScoreBoard.playerFields) {
+        for (int playerFields : BoardhistoryArray.playerFields) {
             jsonArray.put(playerFields);
         }
 
         object.put("playerFields " + round, jsonArray);
-        for (int computerFields : ScoreBoard.computerFields) {
+        for (int computerFields : BoardhistoryArray.computerFields) {
             jsonArray2.put(computerFields);
         }
         object.put("computerFields " + round, jsonArray2);

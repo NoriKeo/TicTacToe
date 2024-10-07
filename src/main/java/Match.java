@@ -1,10 +1,9 @@
 public class Match {
     /*default*/ static Board board;
-    /*default*/
     /*default*/static boolean playerWin = false;
     /*default*/static boolean computerWin = false;
     /*default*/static int rounds;
-    ScoreBoard scoreBoard = new ScoreBoard();
+    BoardhistoryArray scoreBoard = new BoardhistoryArray();
     static int match;
     static Position position;
     static int input;

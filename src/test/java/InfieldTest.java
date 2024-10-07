@@ -1,81 +1,48 @@
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.IOException;
-import java.util.Scanner;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class InfieldTest {
+    @Mock
+    UserInputOutputService userInputOutputService;
 
     @Mock
-    Scanner scanner = new Scanner(System.in);
-
+    Print printi;
 
     @Mock
-    Board board;
+    JsonFileRead jsonFileRead;
 
+    @Mock
+    ScoreBoardWriter scoreBoardWriterandPrinter;
 
-    ;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @InjectMocks
+    Infofield infofield;
 
     @Test
-    public void inputGameTest() throws IOException {
-        Infofield infofield = Infofield.getInstance();
-        PrintMatchHistory printMatchHistory = mock(PrintMatchHistory.class);
-
-        when(infofield.input()).thenReturn("game");
+    public void inputGameTest() {
+        doReturn("info").when(userInputOutputService).getInput();
         infofield.info();
-        //verify(ArgumentMatchers(PrintMatchHistory.matchHistory()));
-        //verify(ArgumentMatchers.any().);
-        //Mockito.verify(infofield, Mockito.atLeastOnce()).input();
-        verify(printMatchHistory);
-        //verify(infofield.input(), Mockito.times(1) );
-
-
-
-
-        /*verify(PrintMatchHistory,atLeastOnce()).matchHistory();
-        JsonFileRead mockJsonFileRead = mock(JsonFileRead.class);
-
-
-        verify(mockJsonFileRead, times(1));
-        JsonFileRead.jsonRead();
-        System.out.println("fertig mit game test");*/
-
+        verify(userInputOutputService, times(2)).printWelcomeMessage();
     }
 
     @Test
-    public void scoreTest() {
+    public void infoTest() {
+        doReturn("g").when(userInputOutputService).getInput();
+        infofield.info();
+        verify(printi).matchHistory();
 
-        when(scanner.nextLine()).thenReturn("Score");
-
-        /*Infofield.getInstance().info();
-        assertTrue(infofield.scoreprint);
-        System.out.println("fertig mit scoretest");*/
 
     }
-
-    /*@Test
-    public void infoTest() throws IOException {
-
-        when(scanner.nextLine()).thenReturn("info");
-
-         infofield.info();
-    }*/
-
+    
     @Test
-    public void test() {
-        assertEquals(1, 1);
+    public void printTest() {
+        doReturn("score").when(userInputOutputService).getInput();
+        infofield.info();
+
     }
-
-
 }

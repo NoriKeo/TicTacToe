@@ -1,62 +1,48 @@
-import java.util.Scanner;
 import java.util.Set;
 
 public class Infofield {
+    private static final Set<String> INFO = Set.of("i", "I", "info", "INFO");
+    private static final Set<String> GAME = Set.of("Game", "game", "g", "G");
+    private static final Set<String> SCORE = Set.of("Score", "score", "s", "S");
+    private final UserInputOutputService userIOService;
+    private final Print printi;
+    static boolean scoreprint = false;
     private static Infofield INSTANCE;
 
-    private static final Set<String> INPUTS = Set.of("i", "I", "info", "INFO");
-    private static final Set<String> INPUTS2 = Set.of("Game", "game", "g", "G");
-    private static final Set<String> INPUTS3 = Set.of("Score", "score", "s", "S");
-    static boolean scoreprint = false;
-    Scanner scScanner = new Scanner(System.in);
+    private Infofield(UserInputOutputService userInputOutputService, Print print) {
+        this.userIOService = userInputOutputService;
+        this.printi = print;
+    }
 
-    private Infofield() {
-
+    public static Infofield getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Infofield(UserInputOutputService.getInstance(), Print.getInstancePrint());
+        }
+        return INSTANCE;
     }
 
     public void info() {
         Board board = new Board();
 
+        userIOService.printWelcomeMessage();
+        String input = userIOService.getInput();
 
-        System.out.println("Wilkommen im infoteil");
-        System.out.println("Wenn vergangene spiele sehen möchtes gebe bitte Game ein");
-        System.out.println("Möchtest du das Scoreboard sehen geben bitte score ein");
-        System.out.println("Möchtest du zum Spiel gebe eine Zahl ein");
-        String input = input();
-        if (INPUTS2.contains(input)) {
-            System.out.println("game");
-
-            PrintMatchHistory.matchHistory();
-
+        if (GAME.contains(input)) {
+            printi.matchHistory();
+            return;
         }
-        if (INPUTS3.contains(input)) {
+
+        if (SCORE.contains(input)) {
             scoreprint = true;
-            Score.score(board);
-        }
-        if (INPUTS.contains(input)) {
-            System.out.println("Wilkommen im infoteil");
-            System.out.println("Wenn vergangene spiele sehen möchtes gebe bitte Game ein");
-            System.out.println("Möchtest du das Scoreboard sehen geben bitte score ein");
-            System.out.println("Möchtest du zum Spiel gebe eine Zahl ein");
-        }
-        if (!INPUTS.contains(input) || !INPUTS2.contains(input) || !INPUTS3.contains(input)) {
-            Player.askInput(board);
+            ScoreBoardPrinter.getInstance().getPrintetScore(board);
+            return;
         }
 
+        if (INFO.contains(input)) {
+            userIOService.printWelcomeMessage();
+            return;
+        }
 
+        Player.askInput(board);
     }
-
-    String input() {
-        return scScanner.nextLine();
-    }
-
-    public static Infofield getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new Infofield();
-        }
-
-        return INSTANCE;
-    }
-
-
 }

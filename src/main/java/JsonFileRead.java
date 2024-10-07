@@ -14,17 +14,27 @@ import java.util.ArrayList;
 public class JsonFileRead {
 
 
-    static File s = new File("test.json");
-    static JsonObject object;
-    static JsonArray jsonArray = Json.createArrayBuilder().build();
-    static JsonArray jsonArray1 = Json.createArrayBuilder().build();
-    static JsonReader jsonReader;
-    static ArrayList<String> list = new ArrayList<>();
-    static ArrayList<String> list2 = new ArrayList<>();
+    JsonArray playerArray;
+    JsonArray computerArray;
+    private static JsonFileRead instance;
+    ArrayList<String> list = new ArrayList<>();
+    ArrayList<String> list2 = new ArrayList<>();
+    JsonObject object;
+    JsonReader jsonReader;
+    File s = new File("test.json");
+
+    public JsonFileRead() {
+    }
+
+    public static JsonFileRead getInstance() {
+        if (instance == null) {
+            instance = new JsonFileRead();
+        }
+        return instance;
+    }
 
 
-    public static void jsonRead() throws IOException {
-
+    public void jsonRead() throws IOException {
 
         if (s.exists() && s.length() > 0) {
             String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
@@ -43,26 +53,53 @@ public class JsonFileRead {
             }
             if (content.startsWith("{")) {
                 for (String s : list) {
-                    jsonArray = object.getJsonArray(s);
+                    playerArray = object.getJsonArray(s);
                 }
                 for (String s : list2) {
-                    jsonArray1 = object.getJsonArray(s);
+                    computerArray = object.getJsonArray(s);
 
                 }
             } else {
-                jsonArray = Json.createArrayBuilder().build();
-                jsonArray1 = Json.createArrayBuilder().build();
+                playerArray = Json.createArrayBuilder().build();
+                computerArray = Json.createArrayBuilder().build();
                 object = Json.createObjectBuilder().build();
             }
         } else {
-            jsonArray = Json.createArrayBuilder().build();
-            jsonArray1 = Json.createArrayBuilder().build();
+            playerArray = Json.createArrayBuilder().build();
+            computerArray = Json.createArrayBuilder().build();
             object = Json.createObjectBuilder().build();
             System.out.println("File does not exist");
         }
 
 
     }
+
+    public JsonArray getComputerArray() {
+        return computerArray;
+    }
+
+
+    public JsonArray getPlayerArray() {
+        return playerArray;
+    }
+
+
+    public ArrayList<String> getList() {
+        return list;
+    }
+
+
+    public ArrayList<String> getList2() {
+        return list2;
+    }
+
+
+    public JsonObject getObject() {
+        return object;
+    }
+
+
+
 }
 
 
