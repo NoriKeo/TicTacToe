@@ -34,9 +34,9 @@ public class KeepPlaying {
             System.out.println("˜”*°• Viel Spaß •°*”˜");
             Match.rounds = 0;
             BoardhistoryArray.playerFields = new ArrayList<>();
-            ;
+
             BoardhistoryArray.computerFields = new ArrayList<>();
-            ;
+
             gameLoop.start();
             return true;
         }

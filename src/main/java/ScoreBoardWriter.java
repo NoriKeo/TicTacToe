@@ -96,9 +96,6 @@ public class ScoreBoardWriter {
 
     }
 
-    public File getS() {
-        return s;
-    }
 
 
 

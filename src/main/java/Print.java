@@ -73,8 +73,8 @@ public class Print {
             if (list.isEmpty() && list2.isEmpty()) {
                 break;
             }
-            list.remove(list.size() - 1);
-            list2.remove(list2.size() - 1);
+            list.removeLast();
+            list2.removeLast();
 
             playerArray = Json.createArrayBuilder().build();
             computerArray = Json.createArrayBuilder().build();
@@ -86,7 +86,7 @@ public class Print {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         getInstancePrint().matchHistory();
 
     }
