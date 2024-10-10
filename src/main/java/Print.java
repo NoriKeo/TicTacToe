@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Print {
     static int nummber;
     private static Print instance;
+    public static Board boardbreck;
 
     public Print() {
 
@@ -31,7 +32,7 @@ public class Print {
 
         JsonArray playerArray = JsonFileRead.getInstance().getPlayerArray();
         JsonArray computerArray = JsonFileRead.getInstance().getComputerArray();
-        JsonObject object = JsonFileRead.getInstance().getObject();
+        JsonObject matchhistory = JsonFileRead.getInstance().getMatchhistory();
         ArrayList<String> list = JsonFileRead.getInstance().getList();
         ArrayList<String> list2 = JsonFileRead.getInstance().getList2();
 
@@ -40,13 +41,13 @@ public class Print {
             nummber++;
             if (playerArray.isEmpty()) {
                 for (String s : list) {
-                    playerArray = object.getJsonArray(s);
+                    playerArray = matchhistory.getJsonArray(s);
 
                 }
             }
             if (computerArray.isEmpty()) {
                 for (String s : list2) {
-                    computerArray = object.getJsonArray(s);
+                    computerArray = matchhistory.getJsonArray(s);
                 }
             }
 
@@ -84,6 +85,39 @@ public class Print {
 
 
     }
+
+    public static void breckBoard() {
+        if (JsonFileRead.getInstance().getComputerbreck() != null && JsonFileRead.getInstance().getPlayerbreck() != null) {
+            int[] playerbreck = new int[JsonFileRead.getInstance().playerbreck.size()];
+            int[] computerbreck = new int[JsonFileRead.getInstance().computerbreck.size()];
+
+            for (int x = 0; x < JsonFileRead.getInstance().playerbreck.size(); x++) {
+                playerbreck[x] = JsonFileRead.getInstance().playerbreck.getInt(x);
+            }
+            for (int x = 0; x < JsonFileRead.getInstance().computerbreck.size(); x++) {
+                computerbreck[x] = JsonFileRead.getInstance().computerbreck.getInt(x);
+            }
+
+            boardbreck = new Board();
+            for (Integer playerfield : playerbreck) {
+                boardbreck.getField(new Position(playerfield)).setGameCharacter('♡');
+            }
+            for (Integer computerfield : computerbreck) {
+                boardbreck.getField(new Position(computerfield)).setGameCharacter('¤');
+            }
+            boardbreck.print();
+
+        }
+
+    }
+
+
+
+
+
+
+
+
 
 
     public static void main(String[] args) {

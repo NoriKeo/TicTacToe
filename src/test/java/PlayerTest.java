@@ -1,56 +1,70 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+import java.lang.reflect.Field;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
 
-    private static Board getBoard(List<Integer> blcokposition) {
-        Board board = new Board();
-        for (Integer i : blcokposition) {
-            Position position = new Position(i);
-            board.getRows().get(position.getRow()).fields.get(position.getColumn()).setGameCharacter('♡');
-        }
-        return board;
-    }
+    private Player player;
 
-    private static List<Field> returnWinStrategList() {
-        Board board = new Board();
-        List<Field> winStrategs = new ArrayList<>();
-        winStrategs.add(board.getField(new Position(1)));
-        winStrategs.add(board.getField(new Position(2)));
-        winStrategs.add(board.getField(new Position(3)));
+    @Mock
+    private Board mockiBoard;
 
-        return winStrategs;
-    }
+    @Mock
+    private RowFromBoard mockiRowFromBoard;
 
-    private static Stream<Arguments> returnPositionsCheckstream() {
-        return Stream.of(
-                Arguments.of(new Board(), new Position(5)),
-                Arguments.of(getBoard(List.of(1)), new Position(5)),
-                Arguments.of(getBoard(List.of(5)), new Position(5))
+    @Mock
+    private Field mockiField;
 
-        );
-    }
-
-
-    @ParameterizedTest
-    @MethodSource("returnWinStrategList")
-    void winStrategComputerEmptyCheck() {
-        Board board = new Board();
-
-        assertTrue(Player.askInput());
-
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        player = new Player();
     }
 
     @Test
-    void askInput() {
+    public void testAskInput() {
+        String input = "1";
 
+        System.setIn(new java.io.ByteArrayInputStream(input.getBytes()));
 
+        int resulti = player.askInput(mockiBoard);
+        assertEquals(1, resulti);
     }
+
+    @Test
+    public void testValid() {
+
+        assertTrue(player.isvalid(1));
+        assertFalse(player.isvalid(-1));
+    }
+
+
+   /*@Test
+    public void testFreeField() throws Exception {
+
+       List<RowFromBoard> row = new ArrayList<>();
+       row.add(mockiRowFromBoard);
+
+       Field[] fields = {mockiField, mockiField, mockiField};
+
+       when(mockiBoard.getRows()).thenReturn(row);
+
+       for (Field field : fields) {
+       when(mockiRowFromBoard.getFields()).thenReturn(field);
+       }
+
+       when(mockiField.isEmpty()).thenReturn(false,true,false);
+
+       when(mockiField.getPosition()).thenReturn(new Position(2));
+
+       assertFalse(player.freefield(mockiBoard,1));
+
+       assertTrue(player.freefield(mockiBoard,2));
+   }*/
 }

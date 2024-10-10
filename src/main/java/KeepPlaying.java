@@ -37,12 +37,17 @@ public class KeepPlaying {
 
             BoardhistoryArray.computerFields = new ArrayList<>();
 
-            gameLoop.start();
+            try {
+                gameLoop.start();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             return true;
         }
 
 
         System.out.println("╰☆☆Vielen Dank fürs Spielen☆☆╮");
+        System.exit(0);
         return false;
     }
 

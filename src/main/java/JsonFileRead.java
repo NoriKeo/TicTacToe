@@ -12,13 +12,14 @@ import java.util.ArrayList;
 
 
 public class JsonFileRead {
-
-
+    JsonArray computerbreck;
+    JsonArray playerbreck;
     JsonArray playerArray;
     JsonArray computerArray;
     private static JsonFileRead instance;
     ArrayList<String> list = new ArrayList<>();
     ArrayList<String> list2 = new ArrayList<>();
+    JsonObject objectreader;
     JsonObject object;
     JsonReader jsonReader;
     File s = new File("test.json");
@@ -40,7 +41,8 @@ public class JsonFileRead {
             String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
             InputStream is = new FileInputStream("test.json");
             jsonReader = Json.createReader(is);
-            object = jsonReader.readObject();
+
+            objectreader = jsonReader.readObject();
             jsonReader.close();
             is.close();
             for (int i = 1; i < 10; i++) {
@@ -53,21 +55,28 @@ public class JsonFileRead {
             }
             if (content.startsWith("{")) {
                 for (String s : list) {
-                    playerArray = object.getJsonArray(s);
+                    playerArray = objectreader.getJsonArray(s);
                 }
                 for (String s : list2) {
-                    computerArray = object.getJsonArray(s);
+                    computerArray = objectreader.getJsonArray(s);
 
                 }
             } else {
                 playerArray = Json.createArrayBuilder().build();
                 computerArray = Json.createArrayBuilder().build();
-                object = Json.createObjectBuilder().build();
+                objectreader = Json.createObjectBuilder().build();
+            }
+            if (content.contains("playerFieldsbreck") && content.contains("computerFieldsbreck")) {
+                playerbreck = objectreader.getJsonArray("playerFieldsbreck");
+                computerbreck = objectreader.getJsonArray("computerFieldsbreck");
+                if (playerbreck.isEmpty() && computerbreck.isEmpty()) {
+
+                }
             }
         } else {
             playerArray = Json.createArrayBuilder().build();
             computerArray = Json.createArrayBuilder().build();
-            object = Json.createObjectBuilder().build();
+            objectreader = Json.createObjectBuilder().build();
             System.out.println("File does not exist");
         }
 
@@ -94,10 +103,15 @@ public class JsonFileRead {
     }
 
 
-    public JsonObject getObject() {
-        return object;
+    public JsonArray getComputerbreck() {
+
+        return computerbreck;
     }
 
+    public JsonArray getPlayerbreck() {
+
+        return playerbreck;
+    }
 
 
 }

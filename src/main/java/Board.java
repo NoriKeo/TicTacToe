@@ -23,6 +23,7 @@ public class Board {
         }
         System.out.println("✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮✮");
 
+
     }
 
     public List<RowFromBoard> getRows() {

@@ -43,6 +43,6 @@ public class Infofield {
             return;
         }
 
-        Player.askInput(board);
+        Player.getInstance().askInput(board);
     }
 }

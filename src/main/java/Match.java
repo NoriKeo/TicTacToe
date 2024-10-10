@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class Match {
     /*default*/ static Board board;
     /*default*/static boolean playerWin = false;
@@ -10,21 +13,39 @@ public class Match {
     static long t1;
     static long t2;
     static Position computerPosition;
+    static boolean breckBoard = false;
     public Match() {
-        this.board = new Board();
+        board = new Board();
     }
 
     public void start() {
-        board.print();
+        //GameLoop.lock();
+        try {
+            JsonFileRead.getInstance().jsonRead();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (JsonFileRead.getInstance().getComputerbreck() == null && JsonFileRead.getInstance().getPlayerbreck() == null) {
+            board.print();
+
+        } else {
+            Print.breckBoard();
+            board = Print.boardbreck;
+        }
+        if (rounds == 0) {
+            BoardhistoryArray.playerFieldsbreck = new ArrayList<>();
+            BoardhistoryArray.computerFieldsbreck = new ArrayList<>();
+        }
         do {
             t1 = System.currentTimeMillis();
-            input = Player.askInput(board);
+            input = Player.getInstance().askInput(board);
             position = new Position(input);
             board.getRows().get(position.getRow()).getFields().get(position.getColumn()).setGameCharacter('♡');
             board.print();
             GamePlayMove move = new GamePlayMove(position, '♡');
             if (!WinCheck.isWin(board, move)) {
                 scoreBoard.safeGamePlayPlayer();
+
             }
             if (WinCheck.isWin(board, move)) {
                 scoreBoard.safeGamePlayPlayer();
@@ -35,12 +56,15 @@ public class Match {
                 }
 
             }
+
             computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
             GamePlayMove computermove = new GamePlayMove(computerPosition, '¤');
             board.print();
             if (!WinCheck.isWin(board, computermove)) {
                 scoreBoard.safeGamePlayComputer();
+
+
             }
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
@@ -56,8 +80,18 @@ public class Match {
                     System.out.println("Game Over");
                     break;
                 }
+            System.out.println(computerWin + " computer winni");
+            BoardhistoryArray.fieldbrecks();
+            if (WinCheck.isWin(board, computermove)) {
+                computerWin = false;
+                playerWin = false;
+            }
+
+            System.out.println("hallllp" + BoardhistoryArray.playerFieldsbreck);
+            System.out.println("hallllp" + BoardhistoryArray.computerFieldsbreck);
 
 
+            //GameLoop.lock();
             rounds++;
         } while (!board.isFull());
 

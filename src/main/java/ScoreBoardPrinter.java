@@ -68,8 +68,8 @@ public class ScoreBoardPrinter {
             System.out.println("es gab " + drawScore + " ein unentscheiden");
             System.out.println("♥ ----------------------------------- ♥");
         }
-        Match.computerWin = false;
-        Match.playerWin = false;
+       /* Match.computerWin = false;
+        Match.playerWin = false;*/
 
     }
 
