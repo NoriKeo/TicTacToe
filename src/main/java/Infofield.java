@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Set;
 
 public class Infofield {
@@ -28,6 +29,14 @@ public class Infofield {
         String input = userIOService.getInput();
 
         if (GAME.contains(input)) {
+            try {
+                JsonFileRead.getInstance().matchcounter();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (!JsonFileRead.getInstance().list3.isEmpty()) {
+                Print.getInstancePrint().matchHistory();
+            }
             printi.matchHistory();
             return;
         }

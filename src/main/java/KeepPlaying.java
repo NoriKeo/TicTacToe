@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 public class KeepPlaying {
 
-    static int roundprintsafe;
     private static final Set<String> INPUTS = Set.of("Ja", "ja", "Yes");
     static long time;
     static long seconds;
@@ -15,17 +14,18 @@ public class KeepPlaying {
 
 
     public static boolean keepPlaying(Board board) {
-        Match.match++;
+
         ScoreBoardPrinter.getInstance().getPrintetScore(board);
         timeStemp();
         try {
+
             JsonWrite.jsonWriter();
-            roundprintsafe++;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        seconds = TimeUnit.MILLISECONDS.toMinutes(time);
 
+        seconds = TimeUnit.MILLISECONDS.toMinutes(time);
+        Match.match++;
         System.out.println("(っ◔◡◔)っ ♥ Möchtest du weiter spielen ♥");
         String input = Player.scScanner.nextLine();
 
@@ -42,11 +42,19 @@ public class KeepPlaying {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            if (KeepPlaying.keepPlaying(Match.board)) {
+                JsonWrite.object.remove("PID");
+            }
             return true;
         }
 
 
         System.out.println("╰☆☆Vielen Dank fürs Spielen☆☆╮");
+        /*try {
+            JsonWrite.jsonWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
         System.exit(0);
         return false;
     }

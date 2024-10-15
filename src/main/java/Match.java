@@ -14,13 +14,14 @@ public class Match {
     static long t2;
     static Position computerPosition;
     static boolean breckBoard = false;
+    static int roundprintsafe;
     public Match() {
         board = new Board();
     }
 
     public void start() {
-        //GameLoop.lock();
         try {
+            JsonFileRead.getInstance().matchcounter();
             JsonFileRead.getInstance().jsonRead();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -44,11 +45,12 @@ public class Match {
             board.print();
             GamePlayMove move = new GamePlayMove(position, '♡');
             if (!WinCheck.isWin(board, move)) {
-                scoreBoard.safeGamePlayPlayer();
+                BoardhistoryArray.safeGamePlayPlayer();
+
 
             }
             if (WinCheck.isWin(board, move)) {
-                scoreBoard.safeGamePlayPlayer();
+                BoardhistoryArray.safeGamePlayPlayer();
                 playerWin = true;
                 t2 = System.currentTimeMillis();
                 if (!KeepPlaying.keepPlaying(board)) {
@@ -62,13 +64,14 @@ public class Match {
             GamePlayMove computermove = new GamePlayMove(computerPosition, '¤');
             board.print();
             if (!WinCheck.isWin(board, computermove)) {
-                scoreBoard.safeGamePlayComputer();
+                BoardhistoryArray.safeGamePlayComputer();
+
 
 
             }
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
-                scoreBoard.safeGamePlayComputer();
+                BoardhistoryArray.safeGamePlayComputer();
                 t2 = System.currentTimeMillis();
                 if (!KeepPlaying.keepPlaying(board)) {
                     break;
@@ -87,11 +90,18 @@ public class Match {
                 playerWin = false;
             }
 
-            System.out.println("hallllp" + BoardhistoryArray.playerFieldsbreck);
-            System.out.println("hallllp" + BoardhistoryArray.computerFieldsbreck);
+            //System.out.println("hallllp" + BoardhistoryArray.playerFieldsbreck);
+            //System.out.println("hallllp" + BoardhistoryArray.computerFieldsbreck);
 
 
-            //GameLoop.lock();
+            //GameLoop.writeLock();
+
+           /* try {
+                JsonWrite.jsonWriter();
+                roundprintsafe++;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }*/
             rounds++;
         } while (!board.isFull());
 

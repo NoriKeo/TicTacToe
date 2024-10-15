@@ -13,7 +13,7 @@ public class JsonWrite {
     static PrintWriter fileWriter = null;
     static File s = new File("test.json");
     private static final ReentrantLock lock = new ReentrantLock();
-
+    static JSONObject object;
 
     public static void jsonWriter() throws IOException {
         lock.lock();
@@ -21,42 +21,47 @@ public class JsonWrite {
 
 
         int round = Match.match;
-        JSONObject object;
+
             JSONObject matchhistory;
-        JSONArray jsonArray;
-        JSONArray jsonArray2;
             JSONArray jsonArraybreck;
             JSONArray jsonArraybreck2;
 
-        if (s.exists() && s.length() > 0) {
+            if (s.exists() && s.length() > 0) {
             String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
             if (content.startsWith("{")) {
-                object = new JSONObject("matchbreck", content);
-                matchhistory = new JSONObject("matchhistory", content);
-                if (matchhistory.has("playerFields" + round) && matchhistory.has("computerFields" + round)) {
-                    jsonArray = matchhistory.getJSONArray("playerFields" + round);
-                    jsonArray2 = matchhistory.getJSONArray("computerFields" + round);
+                object = new JSONObject(content);
+
+                if (object.has("matchhistory " + round + " PID: " + GameLoop.pid)) {
+                    matchhistory = object.getJSONObject("matchhistory " + round + " PID: " + GameLoop.pid);
+                    /*if (content.contains("playerFields " + round) && content.contains("computerFields " + round)) {
+                    p = matchhistory.getJSONObject("playerFields " + round);
+                    c = matchhistory.getJSONObject("computerFields " + round);
+                    }else {
+                        p = new JSONObject();
+                        c = new JSONObject();
+                    }*/
                 } else {
-                    jsonArray = new JSONArray();
-                    jsonArray2 = new JSONArray();
+                    //p = new JSONObject();
+                    //c = new JSONObject();
+                    matchhistory = new JSONObject();
                 }
                 jsonArraybreck = new JSONArray();
                 jsonArraybreck2 = new JSONArray();
 
             } else {
+                //p = new JSONObject();
                 object = new JSONObject();
-                matchhistory = new JSONObject();
-                jsonArray = new JSONArray();
-                jsonArray2 = new JSONArray();
+                matchhistory = new JSONObject("matchhistory " + round + " PID: " + GameLoop.pid);
+                //c = new JSONObject();
                 jsonArraybreck = new JSONArray();
                 jsonArraybreck2 = new JSONArray();
             }
 
         } else {
+                // p = new JSONObject();
             object = new JSONObject();
             matchhistory = new JSONObject();
-            jsonArray = new JSONArray();
-            jsonArray2 = new JSONArray();
+                //c = new JSONObject();
             jsonArraybreck = new JSONArray();
             jsonArraybreck2 = new JSONArray();
         }
@@ -67,12 +72,12 @@ public class JsonWrite {
                 for (int playerFieldsbreck : BoardhistoryArray.playerFieldsbreck) {
                     jsonArraybreck.put(playerFieldsbreck);
                 }
-                object.put("playerFieldsbreck", jsonArraybreck);
+                object.put("playerFieldsbreck" + " PID: " + GameLoop.pid, jsonArraybreck);
 
                 for (int computerFieldsbreck : BoardhistoryArray.computerFieldsbreck) {
                     jsonArraybreck2.put(computerFieldsbreck);
                 }
-                object.put("computerFieldsbreck", jsonArraybreck2);
+                object.put("computerFieldsbreck" + " PID: " + GameLoop.pid, jsonArraybreck2);
 
             } else {
                 object.put("playerFieldsbreck", jsonArraybreck);
@@ -80,22 +85,25 @@ public class JsonWrite {
             }
 
             if (Match.computerWin || Match.playerWin || Computer.winsStrategy(Match.board).isEmpty() && !Match.playerWin && !Match.computerWin) {
+                int i = 0;
                 for (int playerFields : BoardhistoryArray.playerFields) {
-                    jsonArray.put(playerFields);
+                    matchhistory.put("player " + i, playerFields);
+                    i++;
                 }
-
-                matchhistory.put("playerFields " + round, jsonArray);
+                i = 0;
                 for (int computerFields : BoardhistoryArray.computerFields) {
-                    jsonArray2.put(computerFields);
+                    matchhistory.put("computer " + i, computerFields);
+                    i++;
                 }
-                matchhistory.put("computerFields " + round, jsonArray2);
+                BoardhistoryArray.playerFieldsbreck.add(Match.input);
+
+                object.put("matchhistory " + round + " PID: " + GameLoop.pid, matchhistory);
+                object.put("PID", "" + GameLoop.pid);
+
+
             }
+            fileWriter = new PrintWriter(new FileWriter(s, false));
 
-        //jsonObject.put("Board" + i,board.getField);
-
-
-        fileWriter = new PrintWriter(new FileWriter(s, false));
-            fileWriter.write(matchhistory.toString(2));
             fileWriter.write(object.toString(3));
 
 

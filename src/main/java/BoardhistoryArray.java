@@ -10,15 +10,25 @@ public class BoardhistoryArray {
     static List<Integer> playerFieldsbreck = new ArrayList<>();
     static List<Integer> computerFieldsbreck = new ArrayList<>();
 
-    public void safeGamePlayPlayer() {
+    public static void safeGamePlayPlayer() {
+
         playerFields.add(Match.input);
 
     }
 
-    public void safeGamePlayComputer() {
+    public static void safeGamePlayComputer() {
         int i = Match.computerPosition.getIndex();
         computerFields.add(i);
 
+    }
+
+    public static void safer() {
+        try {
+            JsonWrite.jsonWriter();
+            Match.roundprintsafe++;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void fieldbrecks() {
