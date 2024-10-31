@@ -63,14 +63,14 @@ public class Print {
 
             }
 
-        if (JsonFileRead.getInstance().p == GameLoop.pid) {
+        //if (JsonFileRead.getInstance().p == GameLoop.pid) {
             System.out.println("Board " + nummber);
             board.print();
             numberUsed();
 
-        } else {
-            System.out.println(" Warte ein bisschen oder so ");
-        }
+        // } else {
+        //  System.out.println(" Warte ein bisschen oder so ");
+        //}
 
 
         JsonFileRead.getInstance().list3.remove("matchhistory " + JsonFileRead.getInstance().i);
@@ -86,7 +86,12 @@ public class Print {
 
     }
 
-    public static void breckBoard() {
+    public static Board breckBoard() {
+        try {
+            JsonFileRead.getInstance().breck();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         if (JsonFileRead.getInstance().getComputerbreck() != null && JsonFileRead.getInstance().getPlayerbreck() != null) {
             int[] playerbreck = new int[JsonFileRead.getInstance().playerbreck.size()];
             int[] computerbreck = new int[JsonFileRead.getInstance().computerbreck.size()];
@@ -105,32 +110,34 @@ public class Print {
             for (Integer computerfield : computerbreck) {
                 boardbreck.getField(new Position(computerfield)).setGameCharacter('¤');
             }
-            if (JsonFileRead.getInstance().p == GameLoop.pid) {
-                boardbreck.print();
-            }
-        }
 
+                boardbreck.print();
+            return boardbreck;
+
+        }
+        return null;
     }
 
     public static void numberUsed() {
         int number = Integer.parseInt(ScoreBoardPrinter.getInstance().playerScore);
         int number1 = Integer.parseInt(ScoreBoardPrinter.getInstance().computerScore);
         if (number > number1) {
-            System.out.println(Arrays.toString(playerNumbers));
+            //System.out.println(Arrays.toString(playerNumbers));
             for (int i = 1; i <= 9; i++) {
                 int traget = i;
                 long conut = Arrays.stream(playerNumbers).filter(num -> num == traget).count();
                 if (conut > Match.match) {
-                    System.out.println("Die Zahl " + traget + " kommt " + conut + " Mal vor");
+                    System.out.println("der Spieler hat am meisten gewonnen un da bei nutzete er " + traget + " genau " + conut + " mal");
+
                 }
             }
         }
-        System.out.println(Arrays.toString(computerNumbers));
+        //System.out.println(Arrays.toString(computerNumbers));
         if (number < number1) {
             for (int i = 1; i <= 9; i++) {
                 int traget = i;
                 long conut = Arrays.stream(computerNumbers).filter(num -> num == traget).count();
-                if (conut > Match.match) {
+                if (conut > Match.match && traget != 5) {
                     System.out.println("der Computer hat am meisten gewonnen un da bei nutzete er " + traget + " genau " + conut + " mal");
                 }
             }

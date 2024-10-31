@@ -4,6 +4,7 @@ public class MainTicTacToe {
     public static void main(String[] args) {
 
         try {
+            Login.ask();
             new GameLoop().start();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

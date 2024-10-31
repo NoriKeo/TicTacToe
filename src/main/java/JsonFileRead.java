@@ -69,7 +69,6 @@ public class JsonFileRead {
             String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
             InputStream is = new FileInputStream("test.json");
             jsonReader = Json.createReader(is);
-
             objectreader = jsonReader.readObject();
             jsonReader.close();
             is.close();
@@ -77,11 +76,9 @@ public class JsonFileRead {
             if (content.startsWith("{")) {
 
 
-                p = Long.parseLong(objectreader.getString("PID"));
+                if (content.contains("matchhistory " + i + " Name " + Playername.name)) {
 
-
-                if (content.contains("matchhistory " + i + " PID: " + GameLoop.pid)) {
-                    matchhistory = objectreader.getJsonObject("matchhistory " + i + " PID: " + GameLoop.pid);
+                    matchhistory = objectreader.getJsonObject("matchhistory " + i + " Name " + Playername.name);
                     for (String s : list) {
                         if (matchhistory.containsKey(s)) {
                             int i = matchhistory.getInt(s);
@@ -103,19 +100,33 @@ public class JsonFileRead {
             } else {
                 objectreader = Json.createObjectBuilder().build();
             }
-            if (content.contains("playerFieldsbreck " + " PID: " + GameLoop.pid) && content.contains("computerFieldsbreck " + " PID: " + GameLoop.pid)) {
-                playerbreck = objectreader.getJsonArray("playerFieldsbreck");
-                computerbreck = objectreader.getJsonArray("computerFieldsbreck");
-                if (playerbreck == null && computerbreck == null) {
 
-                }
-            }
         } else {
 
             objectreader = Json.createObjectBuilder().build();
             System.out.println("File does not exist");
         }
 
+
+    }
+
+    public void breck() throws IOException {
+        if (s.exists() && s.length() > 0) {
+            String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
+            InputStream is = new FileInputStream("test.json");
+            jsonReader = Json.createReader(is);
+            objectreader = jsonReader.readObject();
+            jsonReader.close();
+            is.close();
+            if (content.contains("playerFieldsbreck" + " Name " + Playername.name) && content.contains("computerFieldsbreck" + " Name " + Playername.name)) {
+                playerbreck = objectreader.getJsonArray("playerFieldsbreck" + " Name " + Playername.name);
+                computerbreck = objectreader.getJsonArray("computerFieldsbreck" + " Name " + Playername.name);
+                if (playerbreck == null && computerbreck == null) {
+
+                }
+            }
+
+        }
 
     }
 

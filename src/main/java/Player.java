@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Player {
     static Scanner scScanner = new Scanner(System.in);
@@ -19,7 +16,7 @@ public class Player {
     public int askInput(Board board) {
         int input2 = 0;
         String input;
-        System.out.println("♥ Gebe eine Zahl ein oder i für Info♥");
+        System.out.println("♥ Gebe eine Zahl ein oder i für Info ♥");
         System.out.println("♥ Gebe eine Zahl von eins bis neun ein ♥");
         input = scScanner.nextLine();
         if (INPUTS.contains(input)) {
@@ -39,7 +36,24 @@ public class Player {
         if (INPUTS.contains(input)) {
             input2 = askInput(board);
         }
+
         return input2;
+    }
+
+    public int test(Board board) {
+        Random rand = new Random();
+        ArrayList<Integer> test = new ArrayList();
+        for (int i = 1; i <= 9; i++) {
+            test.add(i);
+        }
+        System.out.println(test);
+        while (true) {
+            int input = rand.nextInt(test.size() + 1);
+            System.out.println("ini " + input);
+            if ((board.getField(new Position(input)).isEmpty()) || input != 0) {
+                return input;
+            }
+        }
     }
 
     public boolean isvalid(int input2) {

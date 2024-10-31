@@ -19,8 +19,10 @@
         <exclude name="OnlyOneReturn"/>
         <exclude name="NoPackage"/>
         <exclude name="AtLeastOneConstructor"/>
-
+        <exclude name="CommentDefaultAccessModifier"/>
         <exclude name="FieldDeclarationsShouldBeAtStartOfClass"/>
+        <exclude name="LongVariable"/>
+        <exclude name="ShortVariable"/>
     </rule>
     <rule ref="category/java/design.xml">
         <exclude name="MutableStaticState"/>
@@ -31,6 +33,6 @@
 
     </rule>
     <rule ref="category/java/errorprone.xml"/>
-
+    <rule ref="category/java/codestyle.xml/AtLeastOneConstructor"/>
 
 </ruleset>

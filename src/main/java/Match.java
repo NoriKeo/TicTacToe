@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Match {
@@ -15,31 +14,30 @@ public class Match {
     static Position computerPosition;
     static boolean breckBoard = false;
     static int roundprintsafe;
+
     public Match() {
         board = new Board();
     }
 
     public void start() {
-        try {
-            JsonFileRead.getInstance().matchcounter();
-            JsonFileRead.getInstance().jsonRead();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (JsonFileRead.getInstance().getComputerbreck() == null && JsonFileRead.getInstance().getPlayerbreck() == null) {
-            board.print();
-
-        } else {
-            Print.breckBoard();
-            board = Print.boardbreck;
-        }
         if (rounds == 0) {
             BoardhistoryArray.playerFieldsbreck = new ArrayList<>();
             BoardhistoryArray.computerFieldsbreck = new ArrayList<>();
         }
+        if (Login.login && Print.breckBoard() != null) {
+            Print.breckBoard();
+            board = Print.boardbreck;
+            board.print();
+
+        } else {
+            board = new Board();
+            board.print();
+        }
+
         do {
             t1 = System.currentTimeMillis();
             input = Player.getInstance().askInput(board);
+            //input = Player.getInstance().test(board);
             position = new Position(input);
             board.getRows().get(position.getRow()).getFields().get(position.getColumn()).setGameCharacter('♡');
             board.print();
@@ -67,7 +65,6 @@ public class Match {
                 BoardhistoryArray.safeGamePlayComputer();
 
 
-
             }
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
@@ -80,9 +77,9 @@ public class Match {
 
 
             if (board.isFull() && !KeepPlaying.keepPlaying(board)) {
-                    System.out.println("Game Over");
-                    break;
-                }
+                System.out.println("Game Over");
+                break;
+            }
             System.out.println(computerWin + " computer winni");
             BoardhistoryArray.fieldbrecks();
             if (WinCheck.isWin(board, computermove)) {
@@ -104,7 +101,6 @@ public class Match {
             }*/
             rounds++;
         } while (!board.isFull());
-
 
 
     }

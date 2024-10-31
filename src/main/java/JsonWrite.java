@@ -14,11 +14,12 @@ public class JsonWrite {
     static File s = new File("test.json");
     private static final ReentrantLock lock = new ReentrantLock();
     static JSONObject object;
+    static String name = Playername.name;
 
     public static void jsonWriter() throws IOException {
         lock.lock();
         try {
-
+            System.out.println(" Name: " + name);
 
         int round = Match.match;
 
@@ -31,8 +32,8 @@ public class JsonWrite {
             if (content.startsWith("{")) {
                 object = new JSONObject(content);
 
-                if (object.has("matchhistory " + round + " PID: " + GameLoop.pid)) {
-                    matchhistory = object.getJSONObject("matchhistory " + round + " PID: " + GameLoop.pid);
+                if (object.has("matchhistory " + round + " Name " + name)) {
+                    matchhistory = object.getJSONObject("matchhistory " + round + " Name " + name);
                     /*if (content.contains("playerFields " + round) && content.contains("computerFields " + round)) {
                     p = matchhistory.getJSONObject("playerFields " + round);
                     c = matchhistory.getJSONObject("computerFields " + round);
@@ -51,7 +52,7 @@ public class JsonWrite {
             } else {
                 //p = new JSONObject();
                 object = new JSONObject();
-                matchhistory = new JSONObject("matchhistory " + round + " PID: " + GameLoop.pid);
+                matchhistory = new JSONObject();
                 //c = new JSONObject();
                 jsonArraybreck = new JSONArray();
                 jsonArraybreck2 = new JSONArray();
@@ -72,16 +73,16 @@ public class JsonWrite {
                 for (int playerFieldsbreck : BoardhistoryArray.playerFieldsbreck) {
                     jsonArraybreck.put(playerFieldsbreck);
                 }
-                object.put("playerFieldsbreck" + " PID: " + GameLoop.pid, jsonArraybreck);
+                object.put("playerFieldsbreck" + " Name " + name, jsonArraybreck);
 
                 for (int computerFieldsbreck : BoardhistoryArray.computerFieldsbreck) {
                     jsonArraybreck2.put(computerFieldsbreck);
                 }
-                object.put("computerFieldsbreck" + " PID: " + GameLoop.pid, jsonArraybreck2);
+                object.put("computerFieldsbreck" + " Name " + name, jsonArraybreck2);
 
             } else {
-                object.put("playerFieldsbreck", jsonArraybreck);
-                object.put("computerFieldsbreck", jsonArraybreck2);
+                object.put("playerFieldsbreck" + " Name " + name, jsonArraybreck);
+                object.put("computerFieldsbreck" + " Name " + name, jsonArraybreck2);
             }
 
             if (Match.computerWin || Match.playerWin || Computer.winsStrategy(Match.board).isEmpty() && !Match.playerWin && !Match.computerWin) {
@@ -97,8 +98,9 @@ public class JsonWrite {
                 }
                 BoardhistoryArray.playerFieldsbreck.add(Match.input);
 
-                object.put("matchhistory " + round + " PID: " + GameLoop.pid, matchhistory);
+                object.put("matchhistory " + round + " Name " + name, matchhistory);
                 object.put("PID", "" + GameLoop.pid);
+                object.put(" Name ", name);
 
 
             }

@@ -31,7 +31,10 @@ the computer scans all possible ways in which the player could win.
 If one of them is true, it prevents it by blocking the third game field that
 is missing to win with a game color. If there is a possibility for the computer
 to win. Does he take advantage of this by filling up the rows and so where
-there were previously two of his pieces, there are now three.
+there were previously two of his pieces, there are now three. Every game won
+is saved in a json file so that you can display all past games in the info
+field and see how they were played. If a game is not finished, the already
+occupied fields are also saved in the json file to be able to continue playing it later.
 </h4>
 <br>
 

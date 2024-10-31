@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static java.util.Arrays.stream;
 
@@ -13,7 +14,7 @@ public class Computer {
 
     static boolean draw = false;
 
-
+    static ArrayList<Integer> numbers = new ArrayList<>();
     public static List<Field> rowStrategy(Board board) {
         /*default*/
         List<Field> rowStrategys = new ArrayList<>();
@@ -194,13 +195,17 @@ public class Computer {
 
 
     public static Position getComputerMovement(Board board) {
-        //Random random = new Random();
+        Random random = new Random();
 
         columnStrategy(board);
         diagonalStrategy(board);
         winsStrategy(board);
         computerWin(board);
-
+        if (Match.rounds == 0 && Match.match == 0) {
+            for (int i = 0; i <= 9; i++) {
+                numbers.add(i);
+            }
+        }
 
         if (board.getField(new Position(5)).isEmpty()) {
             return new Position(5);
@@ -208,18 +213,55 @@ public class Computer {
 
 
         if (!computerWin(board).isEmpty()) {
+            if (Match.match < 2) {
+
+                for (int i = 0; i <= numbers.size(); i++) {
+                    int freeField9 = random.nextInt(numbers.size()) + 1;
+                    if (freeField9 > 9) {
+                        freeField9 = freeField9 - 1;
+                    }
+
+                    if (board.getField(new Position(freeField9)).isEmpty()) {
+                        return new Position(freeField9);
+                    }
+                }
+            }
             Field freeField5 = computerWin(board).getFirst();
             System.out.println("computer will gewinnen");
             return freeField5.getPosition();
         }
 
         if (!rowStrategy(board).isEmpty()) {
+            if (Match.match < 2) {
+                while (true) {
+                    int freeField3 = random.nextInt(numbers.size()) + 1;
+                    if (freeField3 > 9) {
+                        freeField3 = freeField3 - 1;
+                    }
+
+                    if (board.getField(new Position(freeField3)).isEmpty()) {
+                        return new Position(freeField3);
+                    }
+                }
+            }
             Field freeField3 = rowStrategy(board).getFirst();
             System.out.println("row");
             return freeField3.getPosition();
 
         }
         if (!diagonalStrategy(board).isEmpty()) {
+            if (Match.match < 3) {
+                for (int i = 0; i <= numbers.size(); i++) {
+                    int freeField1 = random.nextInt(numbers.size()) + 1;
+                    if (freeField1 > 9) {
+                        freeField1 = freeField1 - 1;
+                    }
+
+                    if (board.getField(new Position(freeField1)).isEmpty()) {
+                        return new Position(freeField1);
+                    }
+                }
+            }
             Field freeField1 = diagonalStrategy(board).getFirst();
             System.out.println("diagonal");
             return freeField1.getPosition();
@@ -228,6 +270,18 @@ public class Computer {
         }
         if (!columnStrategy(board).isEmpty()) {
             //int index = random.nextInt(columnStrateg.size());
+            if (Match.match < 4) {
+                for (int i = 0; i <= numbers.size(); i++) {
+                    int freeField2 = random.nextInt(numbers.size()) + 1;
+                    if (freeField2 > 9) {
+                        freeField2 = freeField2 - 1;
+                    }
+
+                    if (board.getField(new Position(freeField2)).isEmpty()) {
+                        return new Position(freeField2);
+                    }
+                }
+            }
             Field freeField2 = columnStrategy(board).getFirst();
             Position position = freeField2.getPosition();
             System.out.println("column");
@@ -235,10 +289,23 @@ public class Computer {
 
         }
         if (winsStrategy(board).isEmpty()) {
-            System.out.println("unentschiden");
+
+
             draw = true;
             if (!KeepPlaying.keepPlaying(board)) {
                 System.out.println("Bye Bye");
+            }
+        }
+        if (Match.match < 2) {
+            for (int i = 0; i <= numbers.size(); i++) {
+                int freeField = random.nextInt(numbers.size()) + 1;
+                if (freeField > 9) {
+                    freeField = freeField - 1;
+                }
+
+                if (board.getField(new Position(freeField)).isEmpty()) {
+                    return new Position(freeField);
+                }
             }
         }
         //int index2 = random.nextInt(winsstrateg.size());

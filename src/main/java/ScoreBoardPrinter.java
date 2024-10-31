@@ -47,17 +47,17 @@ public class ScoreBoardPrinter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (Match.playerWin) {
-            System.out.println("Der Gewinner ist ♡ mit einem score von " + playerScore);
+        if (Match.playerWin && !Computer.draw) {
+            System.out.println("Der Gewinner ist ♡ mit einem score von " + playerScore + " ( •̀ᄇ• ́)ﻭ✧ ");
             System.out.println("Der score von ¤ ist " + computerScore);
         }
-        if (Match.computerWin) {
-            System.out.println("Der Gewinner ist ¤ mit einem score von " + computerScore);
+        if (Match.computerWin && !Computer.draw) {
+            System.out.println("Der Gewinner ist ¤ mit einem score von " + computerScore + "╭( ･ㅂ･)و ̑̑ ＂");
             System.out.println("Der scorer von ♡ ist " + playerScore);
         }
-        if (Computer.winsStrategy(board).isEmpty() && !Match.playerWin && !Match.computerWin) {
+        if (Computer.winsStrategy(board).isEmpty() && !Match.playerWin && !Match.computerWin || Computer.draw) {
             System.out.println("★·.·´¯`·.·★unentschieden★·.·`¯´·.·★");
-            System.out.println("es steht zum " + drawScore + "mal unentscheiden");
+            System.out.println("es steht zum " + drawScore + " mal unentscheiden (❁ᴗ͈ ˬ ᴗ͈)ᶻᶻᶻ✧");
             System.out.println("Der scorer von ♡ ist " + playerScore);
             System.out.println("Der score von ¤ ist " + computerScore);
         }

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class KeepPlaying {
 
-    private static final Set<String> INPUTS = Set.of("Ja", "ja", "Yes");
+    private static final Set<String> INPUTS = Set.of("Ja", "ja", "Yes", "j", "jaa", " ");
     static long time;
     static long seconds;
 
@@ -29,6 +29,7 @@ public class KeepPlaying {
         System.out.println("(っ◔◡◔)っ ♥ Möchtest du weiter spielen ♥");
         String input = Player.scScanner.nextLine();
 
+
         if (INPUTS.contains(input)) {
             GameLoop gameLoop = new GameLoop();
             System.out.println("˜”*°• Viel Spaß •°*”˜");
@@ -48,14 +49,14 @@ public class KeepPlaying {
             return true;
         }
 
-
         System.out.println("╰☆☆Vielen Dank fürs Spielen☆☆╮");
-        /*try {
+        try {
             JsonWrite.jsonWriter();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }*/
+        }
         System.exit(0);
+        //return false;
         return false;
     }
 
@@ -66,7 +67,7 @@ public class KeepPlaying {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         int seconds7 = Math.toIntExact((time / 1000) % 60);
         System.out.println(now.format(df));
-        System.out.println("Dieses Match wurde in einer zeit von " + seconds7 + " sekunden bestritten");
+        System.out.println("Dieses Match wurde in einer zeit von " + seconds7 + " sekunden bestritten └│∵│┐┌│∵│┘");
         try {
             TimeSafe.writer();
         } catch (IOException e) {
