@@ -18,6 +18,7 @@ public class Playername {
     static Scanner scScanner = new Scanner(System.in);
     static String name;
     static File s = new File("name.json");
+    static FileWriter data;
     private static final Set<String> Playrestart = Set.of("yes", "Yes", "YES", "Ja", "JA", "ja", "j", "y");
     private static final Set<String> inputcheck = Set.of("@", "=", "*", " ", "(", ")", "/", "|", ",", "{", "}", "[", "]");
 
@@ -59,6 +60,11 @@ public class Playername {
             } else {
                 Login.ask();
             }
+
+        } else {
+            data = new FileWriter("name.json");
+            System.out.println("Es exesiter noch kein Arccount ");
+            Password.make();
 
         }
     }
@@ -107,7 +113,7 @@ public class Playername {
 
         object.put("Name: " + name, name);
         object.put("Name: " + name, Password.pass);
-        object.put("Name: " + name, Password.pass + " " + Password.question);
+        object.put("Name: " + name, Password.pass + " " + Password.question + " " + Password.question2);
 
 
         fileWriter = new PrintWriter(new FileWriter(s, false));

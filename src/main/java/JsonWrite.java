@@ -19,7 +19,7 @@ public class JsonWrite {
     public static void jsonWriter() throws IOException {
         lock.lock();
         try {
-            System.out.println(" Name: " + name);
+            //System.out.println(" Name: " + name);
 
         int round = Match.match;
 

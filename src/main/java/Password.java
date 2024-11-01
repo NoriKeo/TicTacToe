@@ -15,6 +15,8 @@ public class Password {
     static File s = new File("name.json");
     static String pass;
     static String question;
+    static String question2;
+
     private static final Set<String> inputcheck = Set.of("@", "=", "*", " ", "(", ")", "/", "|", ",", "{", "}", "[", "]");
     static boolean askSecurity = true;
 
@@ -79,6 +81,15 @@ public class Password {
                 System.out.println("Bitte schreibe ein richtige Stadt /(°o°)/");
             }
         }
+        System.out.println(" :D Bantworte bitte die Sicherheitsfrage nummer 2:");
+        System.out.println("Wie hieß dein erstes Plüschtier? ");
+        question2 = scScanner.nextLine();
+        for (String input : inputcheck) {
+            if (question2.contains(input)) {
+                System.out.println("Bitte schreibe ein richtige Stadt /(°o°)/");
+            }
+        }
+        question2 = String.valueOf(question2.hashCode());
         question = String.valueOf(question.hashCode());
         Playername.writer();
 
@@ -89,10 +100,14 @@ public class Password {
         System.out.println("^_^ In welcher Stadt wurdes du geboren?");
         question = scScanner.nextLine();
         question = String.valueOf(question.hashCode());
+        System.out.println(" :D Bantworte bitte die Sicherheitsfrage nummer 2:");
+        System.out.println("Wie hieß dein erstes Plüschtier? ");
+        question2 = scScanner.nextLine();
+        question2 = String.valueOf(question2.hashCode());
         if (s.exists()) {
             String content = new String(Files.readAllBytes(Paths.get("name.json"))).trim();
             JSONObject jsonObject = new JSONObject(content);
-            if (content.contains(question) && content.contains(Playername.name)) {
+            if (content.contains(question) && content.contains(Playername.name) && content.contains(question2)) {
                 jsonObject.remove(Playername.name);
                 try (FileWriter fileWriter = new FileWriter("name.json")) {
                     fileWriter.write(jsonObject.toString(2));
