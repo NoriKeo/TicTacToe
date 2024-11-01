@@ -55,11 +55,9 @@ public class Playername {
     public static void login() throws IOException {
         if (s.exists()) {
             String content = new String(Files.readAllBytes(Paths.get("name.json"))).trim();
-            if (content.contains(name)) {
-                Password.ask();
-            } else {
-                Login.ask();
-            }
+
+            Password.ask();
+
 
         } else {
             data = new FileWriter("name.json");
