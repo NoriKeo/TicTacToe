@@ -31,17 +31,19 @@ public class Password {
                 System.out.println("Dein Passwort ist Richtig ^**^");
                 return true;
             } else {
-                System.out.println("Das Passwort ist leider falsch :)");
+                System.out.println("irgendwas ist falsch gelaufen :)");
                 System.out.println("Probiere es noch mal ^∞^");
+                Playername.ask();
+                Playername.login();
                 String answer = scScanner.nextLine();
-                if (answer.equals(password)) {
+               /* if (answer.equals(password)) {
                     System.out.println("Dein Passwort ist Richtig ^><^");
                 }
                 if (!answer.equals(password)) {
                     askSecurityQuestion();
                 }
 
-                Login.ask();
+                Login.ask();*/
             }
         }
         return false;

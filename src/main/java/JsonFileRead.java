@@ -24,7 +24,6 @@ public class JsonFileRead {
     JsonObject objectreader;
     JsonReader jsonReader;
     static int i = 0;
-    long p;
     File s = new File("test.json");
     int readerjust = 0;
 

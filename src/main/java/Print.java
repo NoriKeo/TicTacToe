@@ -1,4 +1,3 @@
-import javax.json.JsonObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,28 +23,9 @@ public class Print {
 
     public void matchHistory() {
 
+        nummber++;
 
-        //JsonArray playerArray = JsonFileRead.getInstance().getPlayerArray();
-
-        JsonObject objectreader = JsonFileRead.getInstance().getObjectreader();
-        ArrayList<String> list = JsonFileRead.getInstance().getList();
-        ArrayList<String> list2 = JsonFileRead.getInstance().getList2();
-
-
-
-            nummber++;
-
-
-           /* ArrayList playerFields = JsonFileRead.getInstance().getPlayerArray();
-            int[] computerFields = new int[computerArray.size()];
-            for (int x = 0; x < computerArray.size(); x++) {
-                computerFields[x] = computerArray.getInt(x);
-            }
-            for (int x = 0; x < playerArray.size(); x++) {
-                playerFields[x] = playerArray.getInt(x);
-            }*/
-
-            Board board = new Board();
+        Board board = new Board();
         int i = 0;
         for (Integer playerfield : JsonFileRead.getInstance().playerArray) {
                 board.getField(new Position(playerfield)).setGameCharacter('♡');
@@ -63,14 +43,9 @@ public class Print {
 
             }
 
-        //if (JsonFileRead.getInstance().p == GameLoop.pid) {
             System.out.println("Board " + nummber);
             board.print();
             numberUsed();
-
-        // } else {
-        //  System.out.println(" Warte ein bisschen oder so ");
-        //}
 
 
         JsonFileRead.getInstance().list3.remove("matchhistory " + JsonFileRead.getInstance().i);
@@ -122,7 +97,6 @@ public class Print {
         int number = Integer.parseInt(ScoreBoardPrinter.getInstance().playerScore);
         int number1 = Integer.parseInt(ScoreBoardPrinter.getInstance().computerScore);
         if (number > number1) {
-            //System.out.println(Arrays.toString(playerNumbers));
             for (int i = 1; i <= 9; i++) {
                 int traget = i;
                 long conut = Arrays.stream(playerNumbers).filter(num -> num == traget).count();
@@ -132,7 +106,6 @@ public class Print {
                 }
             }
         }
-        //System.out.println(Arrays.toString(computerNumbers));
         if (number < number1) {
             for (int i = 1; i <= 9; i++) {
                 int traget = i;
