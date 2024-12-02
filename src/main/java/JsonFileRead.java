@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class JsonFileRead {
@@ -23,6 +24,8 @@ public class JsonFileRead {
     ArrayList<String> list3;
     JsonObject objectreader;
     JsonReader jsonReader;
+    static int computerPlays;
+    static int playerPlays;
     static int i = 0;
     File s = new File("test.json");
     int readerjust = 0;
@@ -169,6 +172,35 @@ public class JsonFileRead {
             throw new RuntimeException(e);
         }
     }
+
+    public static void initializeDatabase() throws SQLException {
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            Statement stmt = connection.createStatement();
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS match_history (" +
+                    "match_id SERIAL PRIMARY KEY not null, " +
+                    "player_id int NOT NULL foreign key (player_id) REFERENCES accounts(player_id), " +
+                    "computer_plays int, " +
+                    "player_plays int, )";
+            stmt.execute(createTableSQL);
+        }
+    }
+
+    public static void read(int playerId) throws SQLException {
+        String querySQL = "SELECT computer_plays, player_plays FROM match_history WHERE player_id = ?";
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(querySQL);
+            pstmt.setInt(1, playerId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    computerPlays = rs.getInt("computer_plays");
+                    playerPlays = rs.getInt("player_plays");
+                }
+            }
+        }
+    }
+
 }
 
 

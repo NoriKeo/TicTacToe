@@ -10,6 +10,7 @@ public class Print {
     static ArrayList<Integer> numbersplayer = new ArrayList();
     static int[] playerNumbers = new int[30];
     static int[] computerNumbers = new int[30];
+
     public Print() {
 
     }
@@ -20,32 +21,47 @@ public class Print {
         }
         return instance;
     }
+    /*String testi2 = String.valueOf(testi);
+        System.out.println(testi2.length() + " länge");
+
+
+        for (char c : testi2.toCharArray()) {
+        System.out.println(c + ".......");
+    }*/
 
     public void matchHistory() {
 
         nummber++;
 
         Board board = new Board();
-        int i = 0;
+        /*int i = 0;
         for (Integer playerfield : JsonFileRead.getInstance().playerArray) {
                 board.getField(new Position(playerfield)).setGameCharacter('♡');
             playerNumbers[i] = playerfield;
             i++;
 
-            }
-        int c = 0;
-        for (Integer computerfield : JsonFileRead.getInstance().computerArray) {
-                board.getField(new Position(computerfield)).setGameCharacter('¤');
+            }*/
+        String playerPlays = String.valueOf(JsonFileRead.getInstance().playerPlays);
+        for (char c : playerPlays.toCharArray()) {
+            int inputPlayer = c;
+            board.getField(new Position(inputPlayer)).setGameCharacter('♡');
+        }
+        //int c = 0;
+      /*  for (Integer computerfield : JsonFileRead.getInstance().computerArray) {
+                //board.getField(new Position(computerfield)).setGameCharacter('¤');
             //computerNumbers[computerfield]++;
             computerNumbers[c] = computerfield;
-            c++;
+            c++;*/
+        String computerPlays = String.valueOf(JsonFileRead.getInstance().computerPlays);
+        for (char y : computerPlays.toCharArray()) {
+            int inputComputer = y;
+            board.getField(new Position(inputComputer)).setGameCharacter('¤');
+        }
 
 
-            }
-
-            System.out.println("Board " + nummber);
-            board.print();
-            numberUsed();
+        System.out.println("Board " + nummber);
+        board.print();
+        numberUsed();
 
 
         JsonFileRead.getInstance().list3.remove("matchhistory " + JsonFileRead.getInstance().i);
@@ -54,9 +70,7 @@ public class Print {
             JsonFileRead.getInstance().jsonRead();
         } catch (IOException e) {
             throw new RuntimeException(e);
-            }
-
-
+        }
 
 
     }
@@ -86,7 +100,7 @@ public class Print {
                 boardbreck.getField(new Position(computerfield)).setGameCharacter('¤');
             }
 
-                boardbreck.print();
+            boardbreck.print();
             return boardbreck;
 
         }
@@ -116,14 +130,6 @@ public class Print {
             }
         }
     }
-
-
-
-
-
-
-
-
 
 
     public static void main(String[] args) {

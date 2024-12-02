@@ -1,10 +1,14 @@
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class ScoreBoardWriter {
     File s = new File("Score.txt");
-    int scorex;
-    int scorey;
+    static int scorex;
+    static int scorey;
     PrintWriter pWriter;
     int draw;
     BufferedWriter writer;
@@ -95,6 +99,43 @@ public class ScoreBoardWriter {
         }
 
     }
+
+    public static void initializeDatabase() throws SQLException {
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            Statement stmt = connection.createStatement();
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS score (" +
+                    "score_id SERIAL PRIMARY KEY, " +
+                    "player_id INT NOT NULL, " +
+                    "computer_score INT, " +
+                    "player_score INT, " +
+                    "draw_score INT," +
+                    "FOREIGN KEY (player_id) REFERENCES accounts(player_id)" +
+                    ");";
+            stmt.execute(createTableSQL);
+        }
+    }
+
+
+    int computer_score = scorey;
+    int player_score = scorex;
+    int draw_score = draw;
+
+    public void writer(int playerId) throws SQLException {
+        String insertOrUpdateSQL = "INSERT INTO scor (player_id, computer_score, player_score, draw_score) " +
+                "VALUES (?, ?, ?,?) " +
+                "ON CONFLICT (player_id) " +
+                "DO UPDATE SET computer_score = EXCLUDED.computer_score, player_score = EXCLUDED.player_score, draw_score = EXCLUDED.draw_score;";
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
+            pstmt.setInt(1, playerId);
+            pstmt.setInt(2, computer_score);
+            pstmt.setInt(3, player_score);
+            pstmt.setInt(4, draw_score);
+            pstmt.executeUpdate();
+        }
+    }
+
 
 
 

@@ -10,7 +10,7 @@ public class KeepPlaying {
     private static final Set<String> INPUTS = Set.of("Ja", "ja", "Yes", "j", "jaa", " ");
     static long time;
     static long seconds;
-
+    static DateTimeFormatter df;
 
 
     public static boolean keepPlaying(Board board) {
@@ -62,19 +62,23 @@ public class KeepPlaying {
 
     public static void timeStemp() {
         time = Match.t2 - Match.t1;
-
+        timeStemp();
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+        df = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         int seconds7 = Math.toIntExact((time / 1000) % 60);
         System.out.println(now.format(df));
         System.out.println("Dieses Match wurde in einer zeit von " + seconds7 + " sekunden bestritten └│∵│┐┌│∵│┘");
-        try {
+       /* try {
             TimeSafe.writer();
-        } catch (IOException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
 
+    }
+
+    public static void main(String[] args) {
+        timeStemp();
     }
 
 

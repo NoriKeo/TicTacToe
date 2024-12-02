@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.sql.*;
 
 
 public class ScoreBoardPrinter {
@@ -23,9 +25,39 @@ public class ScoreBoardPrinter {
         return instance;
     }
 
+    public static void initializeDatabase() throws SQLException {
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            Statement stmt = connection.createStatement();
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS score (" +
+                    "score_id SERIAL PRIMARY KEY not null, " +
+                    "player_id int NOT NULL foreign key (player_id) REFERENCES accounts(player_id), " +
+                    "computer_score int, " +
+                    "player_score int," +
+                    " draw_score int) )";
+            stmt.execute(createTableSQL);
+        }
+    }
+
+    public void read(int playerId) throws SQLException {
+        String querySQL = "SELECT computer_score, player_score , draw_score FROM score WHERE player_id = ?";
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(querySQL);
+            pstmt.setInt(1, playerId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    computerScore = String.valueOf(rs.getInt("computer_plays"));
+                    playerScore = String.valueOf(rs.getInt("player_plays"));
+                    drawScore = String.valueOf(rs.getInt("draw_plays"));
+                }
+            }
+        }
+    }
+
 
     public void winInfoPrint(Board board) {
-        FileInputStream fis;
+       /* FileInputStream fis;
 
         {
             try {
@@ -38,15 +70,15 @@ public class ScoreBoardPrinter {
 
         InputStreamReader isr = new InputStreamReader(fis);
         br = new BufferedReader(isr);
+*/
 
-
-        try {
+       /* try {
             playerScore = br.readLine();
             computerScore = br.readLine();
             drawScore = br.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         if (Match.playerWin && !Computer.draw) {
             System.out.println("Der Gewinner ist ♡ mit einem score von " + playerScore + " ( •̀ᄇ• ́)ﻭ✧ ");
             System.out.println("Der score von ¤ ist " + computerScore);

@@ -6,6 +6,9 @@ import javax.json.JsonReader;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -119,5 +122,20 @@ public class Playername {
 
 
         fileWriter.close();
+    }
+
+    public static void initializeDatabase() throws SQLException {
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            Statement stmt = connection.createStatement();
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS accounts (" +
+                    "plyer_id SERIAL PRIMARY KEY, " +
+                    "player_name varchar(255), " +
+                    "passwort varchar(255), " +
+                    "player_score INT, " +
+                    "draw_score INT," +
+                    "FOREIGN KEY (player_id) REFERENCES accounts(player_id)" +
+                    ");";
+            stmt.execute(createTableSQL);
+        }
     }
 }

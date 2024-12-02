@@ -9,16 +9,32 @@ public class BoardhistoryArray {
     static List<Integer> computerFields = new ArrayList<>();
     static List<Integer> playerFieldsbreck = new ArrayList<>();
     static List<Integer> computerFieldsbreck = new ArrayList<>();
-
+    static String playerplay;
+    static String computer_play;
     public static void safeGamePlayPlayer() {
+        //player_play = "" + Match.input;
+        //playerFields.add(Match.input);
+        if (Match.rounds == 0) {
+            playerplay = String.valueOf(Match.input);
 
-        playerFields.add(Match.input);
+
+        } else {
+            playerplay = playerplay + Match.input;
+
+        }
+
 
     }
 
     public static void safeGamePlayComputer() {
         int i = Match.computerPosition.getIndex();
-        computerFields.add(i);
+        //computerFields.add(i);
+        if (Match.rounds == 0) {
+            computer_play = String.valueOf(i);
+        } else {
+            computer_play = computer_play + i;
+        }
+
 
     }
 
@@ -42,6 +58,42 @@ public class BoardhistoryArray {
         }
     }
 
+    static int test = 1;
+    static int testi;
+
+    public static void test1() {
+        for (int i = 0; i < 10; i++) {
+            test = i;
+            if (i == 0) {
+                playerplay = "0";
+
+            } else {
+                playerplay = playerplay + test;
+
+            }
+            testi = Integer.parseInt(playerplay);
+            System.out.println(testi);
+
+        }
+    }
+
+    public static void test2() {
+        String testi2 = String.valueOf(testi);
+        System.out.println(testi2.length() + " länge");
+
+
+        for (char c : testi2.toCharArray()) {
+            System.out.println(c + ".......");
+        }
+    }
+
+
+    public static void main(String[] args) {
+        test1();
+        System.out.println("_________________________");
+        test2();
+
+    }
 
 
 }
