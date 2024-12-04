@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +39,12 @@ public class BoardhistoryArray {
     }
 
     public static void safer() {
-        try {
+        /*try {
             JsonWrite.jsonWriter();
             Match.roundprintsafe++;
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     public static void fieldbrecks() {
@@ -52,8 +52,10 @@ public class BoardhistoryArray {
         int i = Match.computerPosition.getIndex();
         computerFieldsbreck.add(i);
         try {
-            JsonWrite.jsonWriter();
-        } catch (IOException e) {
+            JsonWrite.initializeDatabase();
+            JsonWrite.writer();
+            //JsonWrite.jsonWriter();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

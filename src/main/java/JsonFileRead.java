@@ -26,6 +26,7 @@ public class JsonFileRead {
     JsonReader jsonReader;
     static int computerPlays;
     static int playerPlays;
+    static int matchid;
     static int i = 0;
     File s = new File("test.json");
     int readerjust = 0;
@@ -165,35 +166,38 @@ public class JsonFileRead {
         return objectreader;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             JsonFileRead.getInstance().jsonRead();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     public static void initializeDatabase() throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
             Statement stmt = connection.createStatement();
             String createTableSQL = "CREATE TABLE IF NOT EXISTS match_history (" +
                     "match_id SERIAL PRIMARY KEY not null, " +
-                    "player_id int NOT NULL foreign key (player_id) REFERENCES accounts(player_id), " +
+                    "player_id int NOT NULL  FOREIGN key (player_id) REFERENCES accounts(player_id), " +
                     "computer_plays int, " +
-                    "player_plays int, )";
+                    "player_plays int )";
+
             stmt.execute(createTableSQL);
+
         }
     }
 
-    public static void read(int playerId) throws SQLException {
-        String querySQL = "SELECT computer_plays, player_plays FROM match_history WHERE player_id = ?";
+    public static void read() throws SQLException {
+        String querySQL = "SELECT computer_plays, player_plays, match_id FROM match_history WHERE player_id = ?";
 
         try (Connection connection = ConnectionHandler.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(querySQL);
-            pstmt.setInt(1, playerId);
+            pstmt.setInt(1, Playername.playerId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
+                    matchid = rs.getInt("match_id");
                     computerPlays = rs.getInt("computer_plays");
                     playerPlays = rs.getInt("player_plays");
                 }

@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,12 +15,17 @@ public class KeepPlaying {
 
     public static boolean keepPlaying(Board board) {
 
-        ScoreBoardPrinter.getInstance().getPrintetScore(board);
+        try {
+            ScoreBoardPrinter.getInstance().getPrintetScore(board);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         timeStemp();
         try {
-
-            JsonWrite.jsonWriter();
-        } catch (IOException e) {
+            JsonWrite.initializeDatabase();
+            JsonWrite.writer();
+            //JsonWrite.jsonWriter();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -51,8 +56,10 @@ public class KeepPlaying {
 
         System.out.println("╰☆☆Vielen Dank fürs Spielen☆☆╮");
         try {
-            JsonWrite.jsonWriter();
-        } catch (IOException e) {
+            JsonWrite.initializeDatabase();
+            JsonWrite.writer();
+            //JsonWrite.jsonWriter();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         System.exit(0);

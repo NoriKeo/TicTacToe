@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,7 +12,7 @@ public class ScoreBoardWriter {
     static int scorex;
     static int scorey;
     PrintWriter pWriter;
-    int draw;
+    static int draw;
     BufferedWriter writer;
     private static ScoreBoardWriter instance;
 
@@ -48,7 +50,7 @@ public class ScoreBoardWriter {
     }
 
 
-    public void scoreWrite() {
+   /* public void scoreWrite() {
         FileInputStream fis;
         try {
             fis = new FileInputStream(s);
@@ -98,7 +100,7 @@ public class ScoreBoardWriter {
             }
         }
 
-    }
+    }*/
 
     public static void initializeDatabase() throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
@@ -116,11 +118,11 @@ public class ScoreBoardWriter {
     }
 
 
-    int computer_score = scorey;
-    int player_score = scorex;
-    int draw_score = draw;
+    static int computer_score = scorey;
+    static int player_score = scorex;
+    static int draw_score = draw;
 
-    public void writer(int playerId) throws SQLException {
+    public static void writer() throws SQLException {
         String insertOrUpdateSQL = "INSERT INTO scor (player_id, computer_score, player_score, draw_score) " +
                 "VALUES (?, ?, ?,?) " +
                 "ON CONFLICT (player_id) " +
@@ -128,7 +130,7 @@ public class ScoreBoardWriter {
 
         try (Connection connection = ConnectionHandler.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
-            pstmt.setInt(1, playerId);
+            pstmt.setInt(1, Playername.playerId);
             pstmt.setInt(2, computer_score);
             pstmt.setInt(3, player_score);
             pstmt.setInt(4, draw_score);

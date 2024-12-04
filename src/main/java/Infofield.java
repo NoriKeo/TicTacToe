@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Set;
 
 public class Infofield {
@@ -43,7 +44,11 @@ public class Infofield {
 
         if (SCORE.contains(input)) {
             scoreprint = true;
-            ScoreBoardPrinter.getInstance().getPrintetScore(board);
+            try {
+                ScoreBoardPrinter.getInstance().getPrintetScore(board);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             return;
         }
 

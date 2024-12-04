@@ -1,16 +1,8 @@
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class JsonWrite {
@@ -21,7 +13,8 @@ public class JsonWrite {
     static String name = Playername.name;
     static int playerplay = Integer.parseInt(BoardhistoryArray.playerplay);
     static int computerPlays = Integer.parseInt(BoardhistoryArray.computer_play);
-    public static void jsonWriter() throws IOException {
+
+    /*public static void jsonWriter() throws IOException {
         lock.lock();
         try {
             //System.out.println(" Name: " + name);
@@ -39,13 +32,7 @@ public class JsonWrite {
 
                 if (object.has("matchhistory " + round + " Name " + name)) {
                     matchhistory = object.getJSONObject("matchhistory " + round + " Name " + name);
-                    /*if (content.contains("playerFields " + round) && content.contains("computerFields " + round)) {
-                    p = matchhistory.getJSONObject("playerFields " + round);
-                    c = matchhistory.getJSONObject("computerFields " + round);
-                    }else {
-                        p = new JSONObject();
-                        c = new JSONObject();
-                    }*/
+
                 } else {
                     //p = new JSONObject();
                     //c = new JSONObject();
@@ -119,7 +106,7 @@ public class JsonWrite {
             lock.unlock();
         }
 
-    }
+    }*/
 
 
     public static void initializeDatabase() throws SQLException {
@@ -138,20 +125,35 @@ public class JsonWrite {
     }
 
 
-    public static void writer(int playerId) throws SQLException {
-        String insertOrUpdateSQL = "INSERT INTO match_history (player_id, computer_plays, player_plays) " +
-                "VALUES (?, ?, ?) " +
-                "ON CONFLICT (player_id) " +
-                "DO UPDATE SET computer_plays = EXCLUDED.computer_plays, player_plays = EXCLUDED.player_plays;";
+    public static void writer() throws SQLException {
+        String insertOrUpdateSQL = "INSERT INTO match_history (player_id, computer_plays, player_plays, win) VALUES (?, ?, ?,?) ";
+        boolean win = false;
 
         try (Connection connection = ConnectionHandler.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
-            pstmt.setInt(1, playerId);
+            pstmt.setInt(1, Playername.playerId);
             pstmt.setInt(2, computerPlays);
             pstmt.setInt(3, playerplay);
+            pstmt.setBoolean(4, win);
             pstmt.executeUpdate();
         }
     }
+
+    public static boolean checkUnresolvedWins() throws SQLException {
+        String checkSQL = "SELECT * FROM match_history WHERE player_id = ? AND win = false;";
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(checkSQL);
+            pstmt.setInt(1, Playername.playerId);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
 
 
 }

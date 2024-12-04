@@ -1,7 +1,11 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Player {
     static Scanner scScanner = new Scanner(System.in);
+
     private static final Set<String> INPUTS = Set.of("i", "I", "info", "INFO", "Game", "game", "g", "G", "Score", "score", "s", "S");//'♡'
     private static Player instance;
 
@@ -15,10 +19,17 @@ public class Player {
 
     public int askInput(Board board) {
         int input2 = 0;
-        String input;
+        String input = "";
         System.out.println("♥ Gebe eine Zahl ein oder i für Info ♥");
         System.out.println("♥ Gebe eine Zahl von eins bis neun ein ♥");
+
+
+        //scScanner.next();
         input = scScanner.nextLine();
+        //input = scScanner.next();
+
+
+
         if (INPUTS.contains(input)) {
             Infofield.getInstance().info();
         }
@@ -40,7 +51,7 @@ public class Player {
         return input2;
     }
 
-    public int test(Board board) {
+    /*public int test(Board board) {
         Random rand = new Random();
         ArrayList<Integer> test = new ArrayList();
         for (int i = 1; i <= 9; i++) {
@@ -55,7 +66,7 @@ public class Player {
             }
         }
     }
-
+*/
     public boolean isvalid(int input2) {
         return true;
     }

@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Match {
@@ -24,15 +27,21 @@ public class Match {
             BoardhistoryArray.playerFieldsbreck = new ArrayList<>();
             BoardhistoryArray.computerFieldsbreck = new ArrayList<>();
         }
-        if (Login.login && Print.breckBoard() != null) {
+        /*f (Print.breckBoard() == null) {
+            try {
+                Print.initializeDatabase();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             Print.breckBoard();
             board = Print.boardbreck;
             board.print();
 
-        } else {
-            board = new Board();
-            board.print();
-        }
+        } else {*/
+
+        // }
+        board = new Board();
+        board.print();
 
         do {
             t1 = System.currentTimeMillis();
@@ -49,6 +58,17 @@ public class Match {
             }
             if (WinCheck.isWin(board, move)) {
                 BoardhistoryArray.safeGamePlayPlayer();
+                try (Connection connection = ConnectionHandler.getConnection()) {
+                    PreparedStatement winUpate = connection.prepareStatement(
+                            "UPDATE match_history SET win = ? WHERE match_id = ?");
+                    winUpate.setBoolean(1, true);
+                    winUpate.setInt(2, match);
+
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+
                 playerWin = true;
                 t2 = System.currentTimeMillis();
                 if (!KeepPlaying.keepPlaying(board)) {
@@ -56,7 +76,6 @@ public class Match {
                 }
 
             }
-
             computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
             GamePlayMove computermove = new GamePlayMove(computerPosition, '¤');
@@ -69,6 +88,16 @@ public class Match {
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
                 BoardhistoryArray.safeGamePlayComputer();
+                try (Connection connection = ConnectionHandler.getConnection()) {
+                    PreparedStatement winUpate = connection.prepareStatement(
+                            "UPDATE match_history SET win = ? WHERE match_id = ?");
+                    winUpate.setBoolean(1, true);
+                    winUpate.setInt(2, match);
+
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
                 t2 = System.currentTimeMillis();
                 if (!KeepPlaying.keepPlaying(board)) {
                     break;

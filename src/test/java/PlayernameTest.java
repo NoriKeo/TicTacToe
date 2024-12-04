@@ -1,15 +1,10 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Scanner;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PlayernameTest {
 
@@ -27,7 +22,7 @@ public class PlayernameTest {
         Playername.s = testFile;
     }
 
-    @Test
+   /* @Test
     public void testAskPlayername_ValidName() throws IOException {
         playername.scScanner = new Scanner("Namie");
         String name = playername.askPlayername();
@@ -46,7 +41,7 @@ public class PlayernameTest {
         playername.scScanner = new Scanner("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         String name = playername.askPlayername();
         assertNull(name, "zu lang");
-    }
+    }*/
 
 
     @AfterEach

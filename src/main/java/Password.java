@@ -1,12 +1,4 @@
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Scanner;
-import java.util.Set;
+/*import java.util.Set;
 
 public class Password {
 
@@ -36,14 +28,14 @@ public class Password {
                 Playername.ask();
                 Playername.login();
                 String answer = scScanner.nextLine();
-               /* if (answer.equals(password)) {
+               *//* if (answer.equals(password)) {
                     System.out.println("Dein Passwort ist Richtig ^><^");
                 }
                 if (!answer.equals(password)) {
                     askSecurityQuestion();
                 }
 
-                Login.ask();*/
+                Login.ask();*//*
             }
         }
         return false;
@@ -128,4 +120,4 @@ public class Password {
     }
 
 
-}
+}*/

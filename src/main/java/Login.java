@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -13,11 +13,6 @@ public class Login {
         String answer = scScanner.nextLine();
         if (yes.contains(answer)) {
             Playername.ask();
-            try {
-                Playername.login();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
             login = true;
 
         }
@@ -25,13 +20,12 @@ public class Login {
             System.out.println("Möchtest du dich Regestrien");
             String answer2 = scScanner.nextLine();
             if (yes.contains(answer2)) {
-                Playername.ask();
                 try {
-                    Playername.read();
-                } catch (IOException e) {
+                    Playername.initializeDatabase();
+                    Playername.createNewAccount();
+                } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-
             }
             if (no.contains(answer2)) {
                 System.out.println("Bye Bye");

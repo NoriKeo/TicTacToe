@@ -28,22 +28,22 @@ public class ScoreBoardPrinter {
     public static void initializeDatabase() throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
             Statement stmt = connection.createStatement();
-            String createTableSQL = "CREATE TABLE IF NOT EXISTS score (" +
+           /* String createTableSQL = "CREATE TABLE IF NOT EXISTS score (" +
                     "score_id SERIAL PRIMARY KEY not null, " +
                     "player_id int NOT NULL foreign key (player_id) REFERENCES accounts(player_id), " +
                     "computer_score int, " +
                     "player_score int," +
                     " draw_score int) )";
-            stmt.execute(createTableSQL);
+            stmt.execute(createTableSQL);*/
         }
     }
 
-    public void read(int playerId) throws SQLException {
+    public void read() throws SQLException {
         String querySQL = "SELECT computer_score, player_score , draw_score FROM score WHERE player_id = ?";
 
         try (Connection connection = ConnectionHandler.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(querySQL);
-            pstmt.setInt(1, playerId);
+            pstmt.setInt(1, Playername.playerId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -56,7 +56,9 @@ public class ScoreBoardPrinter {
     }
 
 
-    public void winInfoPrint(Board board) {
+    public void winInfoPrint(Board board) throws SQLException {
+        initializeDatabase();
+        read();
        /* FileInputStream fis;
 
         {
@@ -105,9 +107,11 @@ public class ScoreBoardPrinter {
 
     }
 
-    public void getPrintetScore(Board board) {
+    public void getPrintetScore(Board board) throws SQLException {
+        //boardWriter.scoreWrite();
+        ScoreBoardWriter.initializeDatabase();
         boardWriter.scoreCounter();
-        boardWriter.scoreWrite();
+        ScoreBoardWriter.writer();
         winInfoPrint(board);
     }
 

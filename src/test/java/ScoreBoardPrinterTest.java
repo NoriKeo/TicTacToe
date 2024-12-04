@@ -6,6 +6,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static org.mockito.Mockito.*;
 
@@ -30,7 +31,7 @@ public class ScoreBoardPrinterTest {
     }
 
     @Test
-    public void winInfoPrinttestPlayer() throws IOException {
+    public void winInfoPrinttestPlayer() throws IOException, SQLException {
         when(mockiBufferedReader.readLine()).thenReturn("3", "1", "0");
         Match.playerWin = true;
         Match.computerWin = false;

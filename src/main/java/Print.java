@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,7 +11,8 @@ public class Print {
     static ArrayList<Integer> numbersplayer = new ArrayList();
     static int[] playerNumbers = new int[30];
     static int[] computerNumbers = new int[30];
-
+    static int computerPlays;
+    static int playerPlays;
     public Print() {
 
     }
@@ -34,6 +36,16 @@ public class Print {
         nummber++;
 
         Board board = new Board();
+        try {
+            JsonFileRead.initializeDatabase();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            JsonFileRead.getInstance().read();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         /*int i = 0;
         for (Integer playerfield : JsonFileRead.getInstance().playerArray) {
                 board.getField(new Position(playerfield)).setGameCharacter('♡');
@@ -59,7 +71,7 @@ public class Print {
         }
 
 
-        System.out.println("Board " + nummber);
+        System.out.println("Board " + JsonFileRead.getInstance().matchid);
         board.print();
         numberUsed();
 
@@ -75,37 +87,62 @@ public class Print {
 
     }
 
+    public static void initializeDatabase() throws SQLException {
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            Statement stmt = connection.createStatement();
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS match_history (" +
+                    "match_id SERIAL PRIMARY KEY, " +
+                    "player_id INT NOT NULL, " +
+                    "computer_plays INT, " +
+                    "player_plays INT, " +
+                    "win boolean," +
+                    "FOREIGN KEY (player_id) REFERENCES accounts(player_id)" +
+                    ");";
+            stmt.execute(createTableSQL);
+        }
+    }
+
     public static Board breckBoard() {
-        try {
-            JsonFileRead.getInstance().breck();
-        } catch (IOException e) {
+
+        String querySQL = "SELECT computer_plays, player_plays FROM match_history WHERE player_id = ? AND win = false";
+        int computerPlays = -1;
+        int playerPlays = -1;
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(querySQL);
+            pstmt.setInt(1, Playername.playerId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    computerPlays = rs.getInt("computer_plays");
+                    playerPlays = rs.getInt("player_plays");
+                }
+            }
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if (JsonFileRead.getInstance().getComputerbreck() != null && JsonFileRead.getInstance().getPlayerbreck() != null) {
-            int[] playerbreck = new int[JsonFileRead.getInstance().playerbreck.size()];
-            int[] computerbreck = new int[JsonFileRead.getInstance().computerbreck.size()];
 
-            for (int x = 0; x < JsonFileRead.getInstance().playerbreck.size(); x++) {
-                playerbreck[x] = JsonFileRead.getInstance().playerbreck.getInt(x);
-            }
-            for (int x = 0; x < JsonFileRead.getInstance().computerbreck.size(); x++) {
-                computerbreck[x] = JsonFileRead.getInstance().computerbreck.getInt(x);
-            }
-
-            boardbreck = new Board();
-            for (Integer playerfield : playerbreck) {
-                boardbreck.getField(new Position(playerfield)).setGameCharacter('♡');
-            }
-            for (Integer computerfield : computerbreck) {
-                boardbreck.getField(new Position(computerfield)).setGameCharacter('¤');
-            }
-
-            boardbreck.print();
-            return boardbreck;
-
+        if (computerPlays == -1 || playerPlays == -1) {
+            return null;
         }
-        return null;
+
+        String playerBreck = String.valueOf(playerPlays);
+        String computerBreck = String.valueOf(computerPlays);
+
+        Board boardBreck = new Board();
+        for (char playerField : playerBreck.toCharArray()) {
+            int inputPlayer = Character.getNumericValue(playerField); // Convert char to int
+            boardBreck.getField(new Position(inputPlayer)).setGameCharacter('♡');
+        }
+        for (char computerField : computerBreck.toCharArray()) {
+            int inputComputer = Character.getNumericValue(computerField); // Convert char to int
+            boardBreck.getField(new Position(inputComputer)).setGameCharacter('¤');
+        }
+
+        boardBreck.print();
+        return boardBreck;
     }
+
 
     public static void numberUsed() {
         int number = Integer.parseInt(ScoreBoardPrinter.getInstance().playerScore);
