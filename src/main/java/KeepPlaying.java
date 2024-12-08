@@ -20,7 +20,7 @@ public class KeepPlaying {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        timeStemp();
+        //timeStemp();
         try {
             JsonWrite.initializeDatabase();
             JsonWrite.writer();
@@ -69,7 +69,7 @@ public class KeepPlaying {
 
     public static void timeStemp() {
         time = Match.t2 - Match.t1;
-        timeStemp();
+        //timeStemp();
         LocalDateTime now = LocalDateTime.now();
         df = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         int seconds7 = Math.toIntExact((time / 1000) % 60);

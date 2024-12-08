@@ -38,19 +38,90 @@ public class Playername {
 
     }
 
+    /* public static boolean askPlayername() throws IOException, SQLException {
+         System.out.println("^~^ Bitte geben Sie einen Namen ein:");
+         name = scScanner.nextLine();
+
+         for (String intput : inputcheck) {
+             if (name.contains(intput) || name.length() > 32) {
+                 System.out.println("Dein Name ist zulang oder enthält unerlaubte Symbole -^^,--,~");
+                 askPlayername();
+             }
+
+         }
+         try (Connection connection = ConnectionHandler.getConnection();
+              Scanner scanner = new Scanner(System.in)) {
+
+             System.out.print("Gebe ein Passwort ein: ");
+             String password = scScanner.nextLine();
+             password = hashPassword(password);
+
+             PreparedStatement checkCredentialsStmt = connection.prepareStatement(
+                     "SELECT player_id FROM accounts WHERE player_name = ? AND passwort = ?");
+             checkCredentialsStmt.setString(1, name);
+             checkCredentialsStmt.setString(2, password);
+
+             ResultSet resultSet = checkCredentialsStmt.executeQuery();
+             if (resultSet.next()) {
+                 playerId = resultSet.getInt("player_id");
+                 System.out.println("einloggen war erfolgreich");
+                 return true;
+             } else {
+                 System.out.println("irgend was ist falsch gelaufen");
+                 System.out.println("wenn du einen neuen Account erstellen möchtest geben bitte create ein ");
+                 System.out.println("wenn du die sicherheitsfrage nutzen möchtest um einen neues Passwort zu erstellen das gebe bitte question ein ");
+                 String response = scanner.nextLine();
+
+                 if (response.equalsIgnoreCase("question")) {
+                     System.out.println("Bantworte die Sicherheitsfrage: ");
+                     System.out.println("Wie hieß dein erstes Plüschtier? ");
+                     question2 = scScanner.nextLine();
+                     question2 = hashPassword(question2);
+                     PreparedStatement securityQuestionStmt = connection.prepareStatement(
+                             "SELECT player_id FROM accounts WHERE player_name = ? AND security_question = ?");
+                     securityQuestionStmt.setString(1, name);
+                     securityQuestionStmt.setString(2, question2);
+                     ResultSet result = securityQuestionStmt.executeQuery();
+
+                     if (result.next()) {
+                         System.out.println("Bitte geben ein neus Passwort ein:");
+                         newPasswort = scScanner.nextLine();
+                         PreparedStatement newPasswordStmt = connection.prepareStatement(
+                                 "UPDATE accounts SET passwort = ? WHERE player_id = ?");
+                         newPasswordStmt.setString(1, newPasswort);
+                         newPasswordStmt.setInt(2, playerId);
+                         System.out.println("Passwort gespeichert");
+                         askPlayername();
+                     }
+                 }
+                 scScanner.close();
+
+                 if (response.equalsIgnoreCase("create")) {
+                     createNewAccount();
+                     return true;
+                 } else {
+                     System.out.println("Goodbye!");
+                     return false;
+                 }
+             }
+
+         } catch (NoSuchAlgorithmException e) {
+             throw new RuntimeException(e);
+         }
+
+     }*/
     public static boolean askPlayername() throws IOException, SQLException {
         System.out.println("^~^ Bitte geben Sie einen Namen ein:");
         name = scScanner.nextLine();
 
-        for (String intput : inputcheck) {
-            if (name.contains(intput) || name.length() > 32) {
-                System.out.println("Dein Name ist zulang oder enthält unerlaubte Symbole -^^,--,~");
-                askPlayername();
+        for (String input : inputcheck) {
+            if (name.contains(input) || name.length() > 32) {
+                System.out.println("Dein Name ist zu lang oder enthält unerlaubte Symbole -^^,--,~");
+                return askPlayername();
             }
-
         }
-        try (Connection connection = ConnectionHandler.getConnection();
-             Scanner scanner = new Scanner(System.in)) {
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
 
             System.out.print("Gebe ein Passwort ein: ");
             String password = scScanner.nextLine();
@@ -62,41 +133,42 @@ public class Playername {
             checkCredentialsStmt.setString(2, password);
 
             ResultSet resultSet = checkCredentialsStmt.executeQuery();
-
             if (resultSet.next()) {
                 playerId = resultSet.getInt("player_id");
-                System.out.println("einloggen war erfolgreich");
+                System.out.println("Einloggen war erfolgreich");
                 return true;
             } else {
-                System.out.println("irgend was ist falsch gelaufen");
-                System.out.println("wenn du einen neuen Account erstellen möchtest geben bitte create ein ");
-                System.out.println("wenn du die sicherheitsfrage nutzen möchtest um einen neues Passwort zu erstellen das gebe bitte question ein ");
-                String response = scanner.nextLine();
+                System.out.println("Irgendwas ist falsch gelaufen");
+                System.out.println("Wenn du einen neuen Account erstellen möchtest, gib bitte 'create' ein.");
+                System.out.println("Wenn du die Sicherheitsfrage nutzen möchtest, um ein neues Passwort zu erstellen, gib bitte 'question' ein.");
+                String response = scScanner.nextLine();
 
                 if (response.equalsIgnoreCase("question")) {
-                    System.out.println("Bantworte die Sicherheitsfrage: ");
-                    System.out.println("Wie hieß dein erstes Plüschtier? ");
+                    System.out.println("Beantworte die Sicherheitsfrage:");
+                    System.out.println("Wie hieß dein erstes Plüschtier?");
                     question2 = scScanner.nextLine();
                     question2 = hashPassword(question2);
+
                     PreparedStatement securityQuestionStmt = connection.prepareStatement(
                             "SELECT player_id FROM accounts WHERE player_name = ? AND security_question = ?");
                     securityQuestionStmt.setString(1, name);
                     securityQuestionStmt.setString(2, question2);
                     ResultSet result = securityQuestionStmt.executeQuery();
-                    scScanner.nextLine();
 
                     if (result.next()) {
-                        System.out.println("Bitte geben ein neus Passwort ein:");
+                        playerId = result.getInt("player_id");
+                        System.out.println("Bitte gib ein neues Passwort ein:");
                         newPasswort = scScanner.nextLine();
                         PreparedStatement newPasswordStmt = connection.prepareStatement(
                                 "UPDATE accounts SET passwort = ? WHERE player_id = ?");
-                        newPasswordStmt.setString(1, newPasswort);
+                        newPasswordStmt.setString(1, hashPassword(newPasswort));
                         newPasswordStmt.setInt(2, playerId);
+                        newPasswordStmt.executeUpdate();
                         System.out.println("Passwort gespeichert");
-                        scScanner.nextLine();
-                        askPlayername();
+                        return askPlayername();
                     }
                 }
+
                 if (response.equalsIgnoreCase("create")) {
                     createNewAccount();
                     return true;
@@ -109,8 +181,8 @@ public class Playername {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
 
        /* public static void login() throws IOException {
@@ -243,18 +315,14 @@ public class Playername {
     }*/
 
     public static void createNewAccount() throws SQLException {
-        try (Connection connection = ConnectionHandler.getConnection();
-             Scanner scanner = new Scanner(System.in)) {
-
+        try (Connection connection = ConnectionHandler.getConnection()) {
             System.out.println("^~^ Bitte geben Sie einen Namen ein:");
-            String playerName = scanner.nextLine();
-
+            String playerName = scScanner.nextLine();
             System.out.print("Geben Sie ein Passwort ein: ");
-            String password = scanner.nextLine();
-
+            String password = scScanner.nextLine();
             System.out.print("Beantworten Sie die Sicherheitsfrage: ");
             System.out.println("Wie hieß dein erstes Plüschtier?");
-            String securityAnswer = scanner.nextLine();
+            String securityAnswer = scScanner.nextLine();
 
             password = hashPassword(password);
             securityAnswer = hashPassword(securityAnswer);
@@ -282,6 +350,7 @@ public class Playername {
             throw new RuntimeException(e);
         }
     }
+
 
 }
 

@@ -14,8 +14,10 @@ public class ScoreBoardWriter {
     PrintWriter pWriter;
     static int draw;
     BufferedWriter writer;
+    static int computer_score;
+    static int player_score;
     private static ScoreBoardWriter instance;
-
+    static int draw_score;
 
     public ScoreBoardWriter() {
     }
@@ -47,6 +49,9 @@ public class ScoreBoardWriter {
         if (Computer.draw) {
             draw++;
         }
+        computer_score = scorey;
+        player_score = scorex;
+        draw_score = draw;
     }
 
 
@@ -118,23 +123,36 @@ public class ScoreBoardWriter {
     }
 
 
-    static int computer_score = scorey;
-    static int player_score = scorex;
-    static int draw_score = draw;
+
 
     public static void writer() throws SQLException {
-        String insertOrUpdateSQL = "INSERT INTO scor (player_id, computer_score, player_score, draw_score) " +
-                "VALUES (?, ?, ?,?) " +
-                "ON CONFLICT (player_id) " +
-                "DO UPDATE SET computer_score = EXCLUDED.computer_score, player_score = EXCLUDED.player_score, draw_score = EXCLUDED.draw_score;";
+        String insertOrUpdateSQL;
+        if (Match.rounds == 0) {
+            insertOrUpdateSQL = "INSERT INTO score (player_id, computer_score, player_score, draw_score) " +
+                    "VALUES (?, ?, ?,?) ";
 
-        try (Connection connection = ConnectionHandler.getConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
-            pstmt.setInt(1, Playername.playerId);
-            pstmt.setInt(2, computer_score);
-            pstmt.setInt(3, player_score);
-            pstmt.setInt(4, draw_score);
-            pstmt.executeUpdate();
+            try (Connection connection = ConnectionHandler.getConnection()) {
+                PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
+                pstmt.setInt(1, Playername.playerId);
+                pstmt.setInt(2, computer_score);
+                pstmt.setInt(3, player_score);
+                pstmt.setInt(4, draw_score);
+                pstmt.executeUpdate();
+            }
+        } else {
+
+            insertOrUpdateSQL = "UPDATE score SET computer_score = ?, player_score = ?,draw_score = ? WHERE player_id = ?";
+
+            try (Connection connection = ConnectionHandler.getConnection()) {
+                PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
+                pstmt.setInt(1, computer_score);
+                pstmt.setInt(2, player_score);
+                pstmt.setInt(3, draw_score);
+                pstmt.setInt(4, Playername.playerId);
+
+                pstmt.executeUpdate();
+            }
+
         }
     }
 

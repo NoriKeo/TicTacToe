@@ -25,9 +25,9 @@ public class Player {
 
 
         //scScanner.next();
+
         input = scScanner.nextLine();
         //input = scScanner.next();
-
 
 
         if (INPUTS.contains(input)) {

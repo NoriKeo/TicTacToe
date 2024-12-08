@@ -22,6 +22,7 @@ public class BoardhistoryArray {
             playerplay = playerplay + Match.input;
 
         }
+        System.out.println(playerplay + "testttti");
 
 
     }

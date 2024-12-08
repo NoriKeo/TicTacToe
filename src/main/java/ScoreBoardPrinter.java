@@ -28,13 +28,13 @@ public class ScoreBoardPrinter {
     public static void initializeDatabase() throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
             Statement stmt = connection.createStatement();
-           /* String createTableSQL = "CREATE TABLE IF NOT EXISTS score (" +
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS score (" +
                     "score_id SERIAL PRIMARY KEY not null, " +
-                    "player_id int NOT NULL foreign key (player_id) REFERENCES accounts(player_id), " +
+                    "player_id int NOT NULL  REFERENCES accounts(player_id), " +
                     "computer_score int, " +
                     "player_score int," +
-                    " draw_score int) )";
-            stmt.execute(createTableSQL);*/
+                    " draw_score int) ";
+            stmt.execute(createTableSQL);
         }
     }
 
@@ -47,9 +47,9 @@ public class ScoreBoardPrinter {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    computerScore = String.valueOf(rs.getInt("computer_plays"));
-                    playerScore = String.valueOf(rs.getInt("player_plays"));
-                    drawScore = String.valueOf(rs.getInt("draw_plays"));
+                    computerScore = String.valueOf(rs.getInt("computer_score"));
+                    playerScore = String.valueOf(rs.getInt("player_score"));
+                    drawScore = String.valueOf(rs.getInt("draw_score"));
                 }
             }
         }

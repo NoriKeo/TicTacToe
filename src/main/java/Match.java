@@ -60,7 +60,7 @@ public class Match {
                 BoardhistoryArray.safeGamePlayPlayer();
                 try (Connection connection = ConnectionHandler.getConnection()) {
                     PreparedStatement winUpate = connection.prepareStatement(
-                            "UPDATE match_history SET win = ? WHERE match_id = ?");
+                            "UPDATE match_history SET win = ? WHERE match_id = ? ");
                     winUpate.setBoolean(1, true);
                     winUpate.setInt(2, match);
 
@@ -109,8 +109,8 @@ public class Match {
                 System.out.println("Game Over");
                 break;
             }
-            System.out.println(computerWin + " computer winni");
-            BoardhistoryArray.fieldbrecks();
+            //System.out.println(computerWin + " computer winni");
+            //BoardhistoryArray.fieldbrecks();
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = false;
                 playerWin = false;

@@ -179,7 +179,7 @@ public class JsonFileRead {
             Statement stmt = connection.createStatement();
             String createTableSQL = "CREATE TABLE IF NOT EXISTS match_history (" +
                     "match_id SERIAL PRIMARY KEY not null, " +
-                    "player_id int NOT NULL  FOREIGN key (player_id) REFERENCES accounts(player_id), " +
+                    "player_id int NOT NULL REFERENCES accounts(player_id), " +
                     "computer_plays int, " +
                     "player_plays int )";
 

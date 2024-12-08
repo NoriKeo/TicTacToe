@@ -128,7 +128,7 @@ public class JsonWrite {
     public static void writer() throws SQLException {
         String insertOrUpdateSQL = "INSERT INTO match_history (player_id, computer_plays, player_plays, win) VALUES (?, ?, ?,?) ";
         boolean win = false;
-
+        System.out.println(playerplay + "testiiiii 2");
         try (Connection connection = ConnectionHandler.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(insertOrUpdateSQL);
             pstmt.setInt(1, Playername.playerId);
