@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,12 +36,12 @@ public class Print {
 
         Board board = new Board();
         try {
-            JsonFileRead.initializeDatabase();
+            Match_History_Read.initializeDatabase();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         try {
-            JsonFileRead.getInstance().read();
+            Match_History_Read.getInstance().read();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,35 +52,51 @@ public class Print {
             i++;
 
             }*/
-        String playerPlays = String.valueOf(JsonFileRead.getInstance().playerPlays);
-        for (char c : playerPlays.toCharArray()) {
-            int inputPlayer = c;
-            board.getField(new Position(inputPlayer)).setGameCharacter('♡');
+        for (int k = 0; k < 9; k++) {
+            String playerPlays = String.valueOf(Match_History_Read.getInstance().playerPlays);
+
+            int[] plays = new int[playerPlays.length()];
+
+            for (int i = 0; i < playerPlays.length(); i++) {
+                plays[i] = Character.getNumericValue(playerPlays.charAt(i));
         }
-        //int c = 0;
-      /*  for (Integer computerfield : JsonFileRead.getInstance().computerArray) {
-                //board.getField(new Position(computerfield)).setGameCharacter('¤');
-            //computerNumbers[computerfield]++;
-            computerNumbers[c] = computerfield;
-            c++;*/
-        String computerPlays = String.valueOf(JsonFileRead.getInstance().computerPlays);
-        for (char y : computerPlays.toCharArray()) {
-            int inputComputer = y;
-            board.getField(new Position(inputComputer)).setGameCharacter('¤');
+
+            for (int playerplay : plays) {
+                board.getField(new Position(playerplay)).setGameCharacter('♡');
+
+            }
+
+            String computerPlays = String.valueOf(Match_History_Read.getInstance().computerPlays);
+
+            int[] plays2 = new int[computerPlays.length()];
+
+            for (int i = 0; i < computerPlays.length(); i++) {
+                plays2[i] = Character.getNumericValue(computerPlays.charAt(i));
+            }
+
+            for (int playComputer : plays2) {
+                board.getField(new Position(playComputer)).setGameCharacter('¤');
         }
 
 
-        System.out.println("Board " + JsonFileRead.getInstance().matchid);
+            System.out.println("Board " + Match_History_Read.getInstance().matchid);
         board.print();
-        numberUsed();
+            try {
+                Match_History_Read.read();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            //numberUsed();
 
 
-        JsonFileRead.getInstance().list3.remove("matchhistory " + JsonFileRead.getInstance().i);
-        JsonFileRead.getInstance().i++;
+            Match_History_Read.getInstance().list3.remove("matchhistory " + Match_History_Read.getInstance().i);
+            Match_History_Read.getInstance().i++;
         try {
-            JsonFileRead.getInstance().jsonRead();
-        } catch (IOException e) {
+            //JsonFileRead.getInstance().jsonRead();
+            Match_History_Read.read();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
         }
 
 
@@ -171,7 +186,7 @@ public class Print {
 
     public static void main(String[] args) {
         getInstancePrint().matchHistory();
-        numberUsed();
+        //numberUsed();
 
     }
 }

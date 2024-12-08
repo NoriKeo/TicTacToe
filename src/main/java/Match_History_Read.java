@@ -11,14 +11,14 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class JsonFileRead {
+public class Match_History_Read {
 
     JsonArray computerbreck;
     JsonArray playerbreck;
     ArrayList<Integer> playerArray = new ArrayList<>();
     ArrayList<Integer> computerArray = new ArrayList<>();
     JsonObject matchhistory;
-    private static JsonFileRead instance;
+    private static Match_History_Read instance;
     ArrayList<String> list;
     ArrayList<String> list2;
     ArrayList<String> list3;
@@ -31,13 +31,13 @@ public class JsonFileRead {
     File s = new File("test.json");
     int readerjust = 0;
 
-    public JsonFileRead() {
+    public Match_History_Read() {
 
     }
 
-    public static JsonFileRead getInstance() {
+    public static Match_History_Read getInstance() {
         if (instance == null) {
-            instance = new JsonFileRead();
+            instance = new Match_History_Read();
         }
         return instance;
     }
@@ -66,52 +66,7 @@ public class JsonFileRead {
     }
 
 
-    public void jsonRead() throws IOException {
 
-        if (s.exists() && s.length() > 0) {
-            String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
-            InputStream is = new FileInputStream("test.json");
-            jsonReader = Json.createReader(is);
-            objectreader = jsonReader.readObject();
-            jsonReader.close();
-            is.close();
-
-            if (content.startsWith("{")) {
-
-
-                if (content.contains("matchhistory " + i + " Name " + Playername.name)) {
-
-                    matchhistory = objectreader.getJsonObject("matchhistory " + i + " Name " + Playername.name);
-                    for (String s : list) {
-                        if (matchhistory.containsKey(s)) {
-                            int i = matchhistory.getInt(s);
-                            playerArray.add(i);
-                        }
-                    }
-                    for (String s : list2) {
-                        if (matchhistory.containsKey(s)) {
-                            int i = matchhistory.getInt(s);
-                            computerArray.add(i);
-                        }
-
-                    }
-
-                }
-                readerjust++;
-
-
-            } else {
-                objectreader = Json.createObjectBuilder().build();
-            }
-
-        } else {
-
-            objectreader = Json.createObjectBuilder().build();
-            System.out.println("File does not exist");
-        }
-
-
-    }
 
     public void breck() throws IOException {
         if (s.exists() && s.length() > 0) {
@@ -142,44 +97,15 @@ public class JsonFileRead {
         return computerArray;
     }
 
-    public ArrayList<String> getList() {
-        return list;
-    }
 
 
-    public ArrayList<String> getList2() {
-        return list2;
-    }
-
-
-    public JsonArray getComputerbreck() {
-
-        return computerbreck;
-    }
-
-    public JsonArray getPlayerbreck() {
-
-        return playerbreck;
-    }
-
-    public JsonObject getObjectreader() {
-        return objectreader;
-    }
-
-    /*public static void main(String[] args) {
-        try {
-            JsonFileRead.getInstance().jsonRead();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 
     public static void initializeDatabase() throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
             Statement stmt = connection.createStatement();
             String createTableSQL = "CREATE TABLE IF NOT EXISTS match_history (" +
                     "match_id SERIAL PRIMARY KEY not null, " +
-                    "player_id int NOT NULL  FOREIGN key (player_id) REFERENCES accounts(player_id), " +
+                    "player_id int NOT NULL REFERENCES accounts(player_id), " +
                     "computer_plays int, " +
                     "player_plays int )";
 

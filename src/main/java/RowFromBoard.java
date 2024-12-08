@@ -30,9 +30,5 @@ public class RowFromBoard {
         return true;
     }
 
-    public Field getField(Field field) {
-        return fields.get(fields.indexOf(field));
-    }
-
 
 }

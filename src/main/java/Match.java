@@ -1,5 +1,3 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -58,23 +56,19 @@ public class Match {
             }
             if (WinCheck.isWin(board, move)) {
                 BoardhistoryArray.safeGamePlayPlayer();
-                try (Connection connection = ConnectionHandler.getConnection()) {
-                    PreparedStatement winUpate = connection.prepareStatement(
-                            "UPDATE match_history SET win = ? WHERE match_id = ?");
-                    winUpate.setBoolean(1, true);
-                    winUpate.setInt(2, match);
-
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-
-
                 playerWin = true;
                 t2 = System.currentTimeMillis();
                 if (!KeepPlaying.keepPlaying(board)) {
                     break;
                 }
 
+            } else {
+                try {
+                    Match_History_Write.initializeDatabase();
+                    Match_History_Write.writer();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
             computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
@@ -88,46 +82,33 @@ public class Match {
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = true;
                 BoardhistoryArray.safeGamePlayComputer();
-                try (Connection connection = ConnectionHandler.getConnection()) {
-                    PreparedStatement winUpate = connection.prepareStatement(
-                            "UPDATE match_history SET win = ? WHERE match_id = ?");
-                    winUpate.setBoolean(1, true);
-                    winUpate.setInt(2, match);
-
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
 
                 t2 = System.currentTimeMillis();
                 if (!KeepPlaying.keepPlaying(board)) {
+
                     break;
                 }
             }
 
 
             if (board.isFull() && !KeepPlaying.keepPlaying(board)) {
+                try {
+                    Match_History_Write.initializeDatabase();
+                    Match_History_Write.writer();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("Game Over");
                 break;
             }
-            System.out.println(computerWin + " computer winni");
-            BoardhistoryArray.fieldbrecks();
+            //System.out.println(computerWin + " computer winni");
+            //BoardhistoryArray.fieldbrecks();
             if (WinCheck.isWin(board, computermove)) {
                 computerWin = false;
                 playerWin = false;
             }
 
-            //System.out.println("hallllp" + BoardhistoryArray.playerFieldsbreck);
-            //System.out.println("hallllp" + BoardhistoryArray.computerFieldsbreck);
 
-
-            //GameLoop.writeLock();
-
-           /* try {
-                JsonWrite.jsonWriter();
-                roundprintsafe++;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
             rounds++;
         } while (!board.isFull());
 

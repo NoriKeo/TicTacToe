@@ -25,9 +25,9 @@ public class Player {
 
 
         //scScanner.next();
+
         input = scScanner.nextLine();
         //input = scScanner.next();
-
 
 
         if (INPUTS.contains(input)) {
@@ -51,22 +51,7 @@ public class Player {
         return input2;
     }
 
-    /*public int test(Board board) {
-        Random rand = new Random();
-        ArrayList<Integer> test = new ArrayList();
-        for (int i = 1; i <= 9; i++) {
-            test.add(i);
-        }
-        System.out.println(test);
-        while (true) {
-            int input = rand.nextInt(test.size() + 1);
-            System.out.println("ini " + input);
-            if ((board.getField(new Position(input)).isEmpty()) || input != 0) {
-                return input;
-            }
-        }
-    }
-*/
+
     public boolean isvalid(int input2) {
         return true;
     }

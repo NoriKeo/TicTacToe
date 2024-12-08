@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class ConnectionHandler {
 
     public static DriverManager DatabaseConnection;
-    static String jdbcUrl = "jdbc:postgresql://localhost:5432/tiktaktoe";
+    static String jdbcUrl = "jdbc:postgresql://localhost:5432/tiktaktoe_database";
     static String username = "postgres";
     static String password = "mysecretpassword";
 

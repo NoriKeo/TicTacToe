@@ -15,7 +15,7 @@ public class InfieldTest {
     Print printi;
 
     @Mock
-    JsonFileRead jsonFileRead;
+    Match_History_Read jsonFileRead;
 
     @Mock
     ScoreBoardWriter scoreBoardWriterandPrinter;

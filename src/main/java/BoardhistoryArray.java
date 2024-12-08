@@ -22,6 +22,7 @@ public class BoardhistoryArray {
             playerplay = playerplay + Match.input;
 
         }
+        System.out.println(playerplay + "testttti");
 
 
     }
@@ -52,8 +53,8 @@ public class BoardhistoryArray {
         int i = Match.computerPosition.getIndex();
         computerFieldsbreck.add(i);
         try {
-            JsonWrite.initializeDatabase();
-            JsonWrite.writer();
+            Match_History_Write.initializeDatabase();
+            Match_History_Write.writer();
             //JsonWrite.jsonWriter();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,23 +80,10 @@ public class BoardhistoryArray {
         }
     }
 
-    public static void test2() {
-        String testi2 = String.valueOf(testi);
-        System.out.println(testi2.length() + " länge");
 
 
-        for (char c : testi2.toCharArray()) {
-            System.out.println(c + ".......");
-        }
-    }
 
 
-    public static void main(String[] args) {
-        test1();
-        System.out.println("_________________________");
-        test2();
-
-    }
 
 
 }

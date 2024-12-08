@@ -1,3 +1,5 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,11 +22,26 @@ public class KeepPlaying {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        timeStemp();
+        //timeStemp();
         try {
-            JsonWrite.initializeDatabase();
-            JsonWrite.writer();
+            Match_History_Write.initializeDatabase();
+            Match_History_Write.writer();
             //JsonWrite.jsonWriter();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Match_History_Read.initializeDatabase();
+            Match_History_Read.read();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement winUpate = connection.prepareStatement(
+                    "UPDATE match_history SET win = true WHERE match_id = ?  ");
+            winUpate.setInt(1, Match_History_Read.matchid);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -49,19 +66,19 @@ public class KeepPlaying {
                 throw new RuntimeException(e);
             }
             if (KeepPlaying.keepPlaying(Match.board)) {
-                JsonWrite.object.remove("PID");
+                Match_History_Write.object.remove("PID");
             }
             return true;
         }
 
         System.out.println("╰☆☆Vielen Dank fürs Spielen☆☆╮");
-        try {
-            JsonWrite.initializeDatabase();
-            JsonWrite.writer();
+       /* try {
+            Match_History_Write.initializeDatabase();
+            Match_History_Write.writer();
             //JsonWrite.jsonWriter();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         System.exit(0);
         //return false;
         return false;
@@ -69,7 +86,7 @@ public class KeepPlaying {
 
     public static void timeStemp() {
         time = Match.t2 - Match.t1;
-        timeStemp();
+        //timeStemp();
         LocalDateTime now = LocalDateTime.now();
         df = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         int seconds7 = Math.toIntExact((time / 1000) % 60);
