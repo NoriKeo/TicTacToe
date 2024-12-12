@@ -31,11 +31,11 @@ public class Infofield {
 
         if (GAME.contains(input)) {
             try {
-                Match_History_Read.getInstance().matchcounter();
+                MatchHistoryRead.getInstance().matchcounter();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (!Match_History_Read.getInstance().list3.isEmpty()) {
+            if (!MatchHistoryRead.getInstance().list3.isEmpty()) {
                 Print.getInstancePrint().matchHistory();
             }
             printi.matchHistory();

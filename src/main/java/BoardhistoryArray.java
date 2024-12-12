@@ -53,8 +53,8 @@ public class BoardhistoryArray {
         int i = Match.computerPosition.getIndex();
         computerFieldsbreck.add(i);
         try {
-            Match_History_Write.initializeDatabase();
-            Match_History_Write.writer();
+            MatchHistoryWrite.initializeDatabase();
+            MatchHistoryWrite.writer();
             //JsonWrite.jsonWriter();
         } catch (SQLException e) {
             throw new RuntimeException(e);

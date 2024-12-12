@@ -19,11 +19,34 @@ public class ConnectionHandler {
         return connection;
     }
 
-    public static void closeConnection() throws SQLException {
+    /*public static void closeConnection() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }
+    }*/
+
+    public static String getPassword() {
+        return password;
     }
 
+    public static void setPassword(String password) {
+        ConnectionHandler.password = password;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        ConnectionHandler.username = username;
+    }
+
+    public static String getJdbcUrl() {
+        return jdbcUrl;
+    }
+
+    public static void setJdbcUrl(String jdbcUrl) {
+        ConnectionHandler.jdbcUrl = jdbcUrl;
+    }
 }
 

@@ -1,29 +1,19 @@
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Match_History_Read {
+public class MatchHistoryRead {
 
-    JsonArray computerbreck;
-    JsonArray playerbreck;
+
     ArrayList<Integer> playerArray = new ArrayList<>();
     ArrayList<Integer> computerArray = new ArrayList<>();
-    JsonObject matchhistory;
-    private static Match_History_Read instance;
+    private static MatchHistoryRead instance;
     ArrayList<String> list;
     ArrayList<String> list2;
     ArrayList<String> list3;
-    JsonObject objectreader;
-    JsonReader jsonReader;
     static int computerPlays;
     static int playerPlays;
     static int matchid;
@@ -31,13 +21,13 @@ public class Match_History_Read {
     File s = new File("test.json");
     int readerjust = 0;
 
-    public Match_History_Read() {
+    public MatchHistoryRead() {
 
     }
 
-    public static Match_History_Read getInstance() {
+    public static MatchHistoryRead getInstance() {
         if (instance == null) {
-            instance = new Match_History_Read();
+            instance = new MatchHistoryRead();
         }
         return instance;
     }
@@ -68,7 +58,7 @@ public class Match_History_Read {
 
 
 
-    public void breck() throws IOException {
+   /* public void breck() throws IOException {
         if (s.exists() && s.length() > 0) {
             String content = new String(Files.readAllBytes(Paths.get("test.json"))).trim();
             InputStream is = new FileInputStream("test.json");
@@ -86,7 +76,7 @@ public class Match_History_Read {
 
         }
 
-    }
+    }*/
 
 
     public ArrayList getPlayerArray() {

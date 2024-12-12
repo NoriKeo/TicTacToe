@@ -33,6 +33,6 @@
 
     </rule>
     <rule ref="category/java/errorprone.xml"/>
-    <rule ref="category/java/codestyle.xml/AtLeastOneConstructor" />
+    <rule ref="category/java/codestyle.xml/AtLeastOneConstructor"/>
 
 </ruleset>

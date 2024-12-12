@@ -7,6 +7,7 @@ public class Print {
     static int nummber;
     private static Print instance;
     public static Board boardbreck;
+    static Board boardBreck;
     static ArrayList<Integer> numbersplayer = new ArrayList();
     static int[] playerNumbers = new int[30];
     static int[] computerNumbers = new int[30];
@@ -36,12 +37,12 @@ public class Print {
 
         Board board = new Board();
         try {
-            Match_History_Read.initializeDatabase();
+            MatchHistoryRead.initializeDatabase();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         try {
-            Match_History_Read.getInstance().read();
+            MatchHistoryRead.getInstance().read();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,7 +54,7 @@ public class Print {
 
             }*/
         for (int k = 0; k < 9; k++) {
-            String playerPlays = String.valueOf(Match_History_Read.getInstance().playerPlays);
+            String playerPlays = String.valueOf(MatchHistoryRead.getInstance().playerPlays);
 
             int[] plays = new int[playerPlays.length()];
 
@@ -66,7 +67,7 @@ public class Print {
 
             }
 
-            String computerPlays = String.valueOf(Match_History_Read.getInstance().computerPlays);
+            String computerPlays = String.valueOf(MatchHistoryRead.getInstance().computerPlays);
 
             int[] plays2 = new int[computerPlays.length()];
 
@@ -79,21 +80,21 @@ public class Print {
         }
 
 
-            System.out.println("Board " + Match_History_Read.getInstance().matchid);
+            System.out.println("Board " + MatchHistoryRead.getInstance().matchid);
         board.print();
             try {
-                Match_History_Read.read();
+                MatchHistoryRead.read();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             //numberUsed();
 
 
-            Match_History_Read.getInstance().list3.remove("matchhistory " + Match_History_Read.getInstance().i);
-            Match_History_Read.getInstance().i++;
+            MatchHistoryRead.getInstance().list3.remove("matchhistory " + MatchHistoryRead.getInstance().i);
+            MatchHistoryRead.getInstance().i++;
         try {
             //JsonFileRead.getInstance().jsonRead();
-            Match_History_Read.read();
+            MatchHistoryRead.read();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -144,15 +145,37 @@ public class Print {
         String playerBreck = String.valueOf(playerPlays);
         String computerBreck = String.valueOf(computerPlays);
 
-        Board boardBreck = new Board();
-        for (char playerField : playerBreck.toCharArray()) {
+        boardBreck = new Board();
+
+        int[] plays = new int[playerBreck.length()];
+
+        for (int i = 0; i < playerBreck.length(); i++) {
+            plays[i] = Character.getNumericValue(playerBreck.charAt(i));
+        }
+
+        for (int playPlayer : plays) {
+            boardBreck.getField(new Position(playPlayer)).setGameCharacter('♡');
+        }
+
+        int[] plays2 = new int[computerBreck.length()];
+
+        for (int i = 0; i < computerBreck.length(); i++) {
+            plays2[i] = Character.getNumericValue(computerBreck.charAt(i));
+        }
+
+        for (int playComputer : plays2) {
+            boardBreck.getField(new Position(playComputer)).setGameCharacter('¤');
+        }
+
+
+      /*  for (char playerField : playerBreck.toCharArray()) {
             int inputPlayer = Character.getNumericValue(playerField); // Convert char to int
             boardBreck.getField(new Position(inputPlayer)).setGameCharacter('♡');
         }
         for (char computerField : computerBreck.toCharArray()) {
             int inputComputer = Character.getNumericValue(computerField); // Convert char to int
             boardBreck.getField(new Position(inputComputer)).setGameCharacter('¤');
-        }
+        }*/
 
         boardBreck.print();
         return boardBreck;

@@ -24,15 +24,15 @@ public class KeepPlaying {
         }
         //timeStemp();
         try {
-            Match_History_Write.initializeDatabase();
-            Match_History_Write.writer();
+            MatchHistoryWrite.initializeDatabase();
+            MatchHistoryWrite.updater();
             //JsonWrite.jsonWriter();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         try {
-            Match_History_Read.initializeDatabase();
-            Match_History_Read.read();
+            MatchHistoryRead.initializeDatabase();
+            MatchHistoryRead.read();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -40,7 +40,8 @@ public class KeepPlaying {
         try (Connection connection = ConnectionHandler.getConnection()) {
             PreparedStatement winUpate = connection.prepareStatement(
                     "UPDATE match_history SET win = true WHERE match_id = ?  ");
-            winUpate.setInt(1, Match_History_Read.matchid);
+            winUpate.setInt(1, MatchHistoryRead.matchid);
+            winUpate.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -66,7 +67,7 @@ public class KeepPlaying {
                 throw new RuntimeException(e);
             }
             if (KeepPlaying.keepPlaying(Match.board)) {
-                Match_History_Write.object.remove("PID");
+                MatchHistoryWrite.object.remove("PID");
             }
             return true;
         }

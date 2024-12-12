@@ -25,22 +25,22 @@ public class Match {
             BoardhistoryArray.playerFieldsbreck = new ArrayList<>();
             BoardhistoryArray.computerFieldsbreck = new ArrayList<>();
         }
-        /*f (Print.breckBoard() == null) {
+        if (Print.breckBoard() != null) {
             try {
                 Print.initializeDatabase();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             Print.breckBoard();
-            board = Print.boardbreck;
+            board = Print.boardBreck;
             board.print();
 
-        } else {*/
+        } else {
 
-        // }
-        board = new Board();
-        board.print();
-
+            // }
+            board = new Board();
+            board.print();
+        }
         do {
             t1 = System.currentTimeMillis();
             input = Player.getInstance().askInput(board);
@@ -62,13 +62,6 @@ public class Match {
                     break;
                 }
 
-            } else {
-                try {
-                    Match_History_Write.initializeDatabase();
-                    Match_History_Write.writer();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             }
             computerPosition = Computer.getComputerMovement(board);
             board.getRows().get(computerPosition.getRow()).getFields().get(computerPosition.getColumn()).setGameCharacter('¤');
@@ -93,13 +86,34 @@ public class Match {
 
             if (board.isFull() && !KeepPlaying.keepPlaying(board)) {
                 try {
-                    Match_History_Write.initializeDatabase();
-                    Match_History_Write.writer();
+                    MatchHistoryWrite.initializeDatabase();
+                    MatchHistoryWrite.writer();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
                 System.out.println("Game Over");
                 break;
+            }
+            if (!WinCheck.isWin(board, move) && !WinCheck.isWin(board, computermove)) {
+                if (rounds == 0) {
+                    try {
+                        MatchHistoryWrite.initializeDatabase();
+                        MatchHistoryWrite.writer();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else {
+                    try {
+                        MatchHistoryWrite.initializeDatabase();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    MatchHistoryWrite.updater();
+
+                }
+
+
             }
             //System.out.println(computerWin + " computer winni");
             //BoardhistoryArray.fieldbrecks();

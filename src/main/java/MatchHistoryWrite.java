@@ -1,18 +1,20 @@
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Match_History_Write {
-    static PrintWriter fileWriter = null;
+public class MatchHistoryWrite {
     static File s = new File("test.json");
     private static final ReentrantLock lock = new ReentrantLock();
     static JSONObject object;
     static String name = Playername.name;
     static int playerplay = Integer.parseInt(BoardhistoryArray.playerplay);
     static int computerPlays = Integer.parseInt(BoardhistoryArray.computer_play);
+
 
 
     public static void initializeDatabase() throws SQLException {
@@ -45,7 +47,35 @@ public class Match_History_Write {
         }
     }
 
-    public static boolean checkUnresolvedWins() throws SQLException {
+    public static void updater() {
+        int playerPlayUpdatet = Integer.parseInt(BoardhistoryArray.playerplay);
+        int computerPlayUpdatet = Integer.parseInt(BoardhistoryArray.computer_play);
+        try {
+            MatchHistoryRead.initializeDatabase();
+            MatchHistoryRead.read();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        String updateSQL = "UPDATE match_history SET player_plays = ?, computer_plays = ?, win = ? WHERE  player_id = ? AND match_id = ? ";
+        boolean win = false;
+
+        try (Connection connection = ConnectionHandler.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(updateSQL);
+            pstmt.setInt(1, playerPlayUpdatet);
+            pstmt.setInt(2, computerPlayUpdatet);
+            pstmt.setBoolean(3, win);
+            pstmt.setInt(4, Playername.playerId);
+            pstmt.setInt(5, MatchHistoryRead.matchid);
+            pstmt.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+  /*  public static boolean checkUnresolvedWins() throws SQLException {
         String checkSQL = "SELECT * FROM match_history WHERE player_id = ? AND win = false;";
 
         try (Connection connection = ConnectionHandler.getConnection()) {
@@ -58,7 +88,7 @@ public class Match_History_Write {
             }
         }
         return false;
-    }
+    }*/
 
 
 }
