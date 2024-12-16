@@ -22,7 +22,7 @@ public class Login {
             if (yes.contains(answer2)) {
                 try {
                     Playername.initializeDatabase();
-                    Playername.createNewAccount();
+                    Playername.createNewAccount(scScanner);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

@@ -13,28 +13,38 @@ public class Playername {
     static String question2;
     static String newPasswort;
     static int playerId;
+    private static Playername instance;
     private static final Set<String> Playrestart = Set.of("yes", "Yes", "YES", "Ja", "JA", "ja", "j", "y");
     private static final Set<String> inputcheck = Set.of("@", "=", "*", " ", "(", ")", "/", "|", ",", "{", "}", "[", "]");
 
 
+    public Playername() {
+    }
+
+    public static Playername getInstance() {
+        if (instance == null) {
+            instance = new Playername();
+        }
+        return instance;
+    }
     public static void ask() {
         try {
             initializeDatabase();
-            askPlayername();
+            askPlayername(scScanner);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public static boolean askPlayername() throws IOException, SQLException {
+    public static boolean askPlayername(Scanner scScanner) throws IOException, SQLException {
         System.out.println("^~^ Bitte geben Sie einen Namen ein:");
         name = scScanner.nextLine();
 
         for (String input : inputcheck) {
             if (name.contains(input) || name.length() > 32) {
                 System.out.println("Dein Name ist zu lang oder enthält unerlaubte Symbole -^^,--,~");
-                return askPlayername();
+                return askPlayername(scScanner);
             }
         }
 
@@ -82,12 +92,12 @@ public class Playername {
                         newPasswordStmt.setInt(2, playerId);
                         newPasswordStmt.executeUpdate();
                         System.out.println("Passwort gespeichert");
-                        return askPlayername();
+                        return askPlayername(scScanner);
                     }
                 }
 
                 if (response.equalsIgnoreCase("create")) {
-                    createNewAccount();
+                    createNewAccount(scScanner);
                     return true;
                 } else {
                     System.out.println("Goodbye!");
@@ -136,8 +146,7 @@ public class Playername {
     }
 
 
-
-    public static void createNewAccount() throws SQLException {
+    public static void createNewAccount(Scanner scScanner) throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
             System.out.println("^~^ Bitte geben Sie einen Namen ein:");
             String playerName = scScanner.nextLine();

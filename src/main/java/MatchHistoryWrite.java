@@ -12,10 +12,18 @@ public class MatchHistoryWrite {
     private static final ReentrantLock lock = new ReentrantLock();
     static JSONObject object;
     static String name = Playername.name;
-    static int playerplay = Integer.parseInt(BoardhistoryArray.playerplay);
-    static int computerPlays = Integer.parseInt(BoardhistoryArray.computer_play);
 
+    private static MatchHistoryWrite instance;
 
+    public MatchHistoryWrite() {
+    }
+
+    public static MatchHistoryWrite getInstance() {
+        if (instance == null) {
+            instance = new MatchHistoryWrite();
+        }
+        return instance;
+    }
 
     public static void initializeDatabase() throws SQLException {
         try (Connection connection = ConnectionHandler.getConnection()) {
@@ -34,6 +42,8 @@ public class MatchHistoryWrite {
 
 
     public static void writer() throws SQLException {
+        int playerplay = Integer.parseInt(BoardhistoryArray.playerplay);
+        int computerPlays = Integer.parseInt(BoardhistoryArray.computer_play);
         String insertOrUpdateSQL = "INSERT INTO match_history (player_id, computer_plays, player_plays, win) VALUES (?, ?, ?,?) ";
         boolean win = false;
         System.out.println(playerplay + "testiiiii 2");
@@ -74,6 +84,8 @@ public class MatchHistoryWrite {
             throw new RuntimeException(e);
         }
     }
+
+
 
   /*  public static boolean checkUnresolvedWins() throws SQLException {
         String checkSQL = "SELECT * FROM match_history WHERE player_id = ? AND win = false;";

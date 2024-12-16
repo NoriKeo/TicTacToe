@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MatchHistoryWriteTest {
+class ScoreBoardWriterTest {
 
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -46,7 +46,7 @@ class MatchHistoryWriteTest {
     }
 
     @Test
-    void shouldInitializeDatabase() throws SQLException {
+    void shouldInitializeDatabase() {
 
         try {
             MatchHistoryWrite.initializeDatabase();
@@ -54,72 +54,73 @@ class MatchHistoryWriteTest {
         } catch (Exception e) {
             fail(e.getMessage());
         }
-        /*try (Connection connection = ConnectionHandler.getConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement(
-                    "SELECT table_name FROM information_schema.tables WHERE table_name = 'match_history'");
-            ResultSet rs = pstmt.executeQuery();
-            assertTrue(rs.next());
-        }*/
+
     }
 
     void insertTestData2() throws SQLException {
         String insertSQL = "INSERT INTO  public.accounts (player_name, passwort, security_question) VALUES (?, ?, ?)";
         try (Connection connection = ConnectionHandler.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
-            pstmt.setString(1, "name");
-            pstmt.setString(2, "passwort");
-            pstmt.setString(3, "Questinstuff");
+            pstmt.setString(1, "pikachu");
+            pstmt.setString(2, "pikachu123");
+            pstmt.setString(3, "Ash Ketchum");
             pstmt.executeUpdate();
         }
     }
 
-
     @Test
-    void shouldInsertMatchHistory() throws SQLException {
+    void shouldInsertSCoreWriter() throws SQLException {
         insertTestData2();
         Playername.playerId = 1;
-        BoardhistoryArray.playerplay = "12";
-        BoardhistoryArray.computer_play = "14";
-
-        MatchHistoryWrite.writer();
+        ScoreBoardWriter.computer_score = 12;
+        ScoreBoardWriter.player_score = 14;
+        ScoreBoardWriter.draw_score = 20;
+        Match.rounds = 0;
+        ScoreBoardWriter.writer();
 
         try (Connection connection = ConnectionHandler.getConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM match_history WHERE player_id = ?");
+            PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM score WHERE player_id = ?");
             pstmt.setInt(1, Playername.playerId);
             ResultSet rs = pstmt.executeQuery();
 
             assertTrue(rs.next());
-            assertEquals(12, rs.getInt("player_plays"), "player_plays should be 12.");
-            assertEquals(14, rs.getInt("computer_plays"), "computer_plays should be 14.");
-            assertFalse(rs.getBoolean("win"), "win should be false by default.");
+            assertEquals(12, rs.getInt("computer_score"), "player_plays should be 12.");
+            assertEquals(14, rs.getInt("player_score"), "computer_plays should be 14.");
+            assertEquals(20, rs.getInt("draw_score"), "draw_plays should be 20.");
         }
     }
 
     @Test
-    void shouldUpdateMatchHistory() throws SQLException {
+    void shouldInsertScoreBoardWriter() throws SQLException {
+        insertTestData2();
+
         Playername.playerId = 1;
-        BoardhistoryArray.playerplay = "12";
-        BoardhistoryArray.computer_play = "14";
+        ScoreBoardWriter.computer_score = 12;
+        ScoreBoardWriter.player_score = 14;
+        ScoreBoardWriter.draw_score = 20;
+        Match.rounds = 0;
+        ScoreBoardWriter.writer();
 
-        MatchHistoryWrite.writer();
 
-        BoardhistoryArray.playerplay = "18";
-        BoardhistoryArray.computer_play = "20";
-        MatchHistoryRead.matchid = 1;
+        Playername.playerId = 1;
+        ScoreBoardWriter.computer_score = 15;
+        ScoreBoardWriter.player_score = 18;
+        ScoreBoardWriter.draw_score = 25;
+        Match.rounds = 1;
 
-        MatchHistoryWrite.updater();
-
+        ScoreBoardWriter.writer();
         try (Connection connection = ConnectionHandler.getConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM match_history WHERE match_id = ?");
-            pstmt.setInt(1, MatchHistoryRead.matchid);
+            PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM score WHERE player_id = ?");
+            pstmt.setInt(1, Playername.playerId);
             ResultSet rs = pstmt.executeQuery();
 
             assertTrue(rs.next());
-            assertEquals(18, rs.getInt("player_plays"), "sollte 18 sein");
-            assertEquals(20, rs.getInt("computer_plays"), "sollte 20 sein ");
-            assertFalse(rs.getBoolean("win"));
+
+            assertEquals(15, rs.getInt("computer_score"), "player_plays should be 15.");
+            assertEquals(18, rs.getInt("player_score"), "computer_plays should be 18.");
+            assertEquals(25, rs.getInt("draw_score"), "draw_plays should be 25.");
+
         }
     }
-
 
 }

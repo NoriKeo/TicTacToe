@@ -48,7 +48,7 @@ class MatchHistoryReadTest {
     void shouldInitializeDatabase() {
         try {
             MatchHistoryRead.initializeDatabase();
-            assertTrue(true, "Database initialization succeeded");
+            assertTrue(true);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -81,12 +81,15 @@ class MatchHistoryReadTest {
         try {
             insertTestData2();
             insertTestData();
+
+            Playername.playerId = 1;
             MatchHistoryRead.read();
-            assertEquals(0, MatchHistoryRead.matchid, "Match ID should be 1");
-            assertEquals(0, MatchHistoryRead.computerPlays, "Computer plays should be 5");
-            assertEquals(0, MatchHistoryRead.playerPlays, "Player plays should be 7");
+
+            assertEquals(1, MatchHistoryRead.matchid, " sollte 1 sein");
+            assertEquals(5, MatchHistoryRead.computerPlays, " sollte 5 sein");
+            assertEquals(7, MatchHistoryRead.playerPlays, "sollte 7 sein");
         } catch (Exception e) {
-            fail("Read operation failed: " + e.getMessage());
+            fail("Fehler" + e.getMessage());
         }
     }
 
