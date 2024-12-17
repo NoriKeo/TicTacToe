@@ -1,127 +1,63 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.junit.Assert.*;
 
 class ComputerTest {
 
-    private static Board getBoard(List<Integer> blcokposition) {
-        Board board = new Board();
-        for (Integer i : blcokposition) {
-            Position position = new Position(i);
-            board.getRows().get(position.getRow()).fields.get(position.getColumn()).setGameCharacter('♡');
-        }
-        return board;
-    }
+    private Board board;
 
-
-    @Test
-    void diagonalStrategsEmptyCheck() {
-
+    @BeforeEach
+    void setUp() {
+        board = new Board();
+        Match.rounds = 0;
+        Match.match = 0;
+        Computer.numbers.clear();
+        Computer.draw = false;
     }
 
     @Test
-    void columnStrategsEmptyCheck() {
+    void computerTestGameStart() {
+        Position computerMovement = Computer.getComputerMovement(board);
+        assertEquals(5, computerMovement.getIndex());
 
     }
 
     @Test
-    void rowStrategsEmptyCheck() {
+    void computerTestwinMove() {
+
+        board.getField(new Position(5)).setGameCharacter('¤');
+        board.getField(new Position(4)).setGameCharacter('¤');
+        Position computerMovement = Computer.getComputerMovement(board);
+
+        assertEquals(6, computerMovement.getIndex());
 
     }
 
     @Test
-    void winsstrategsEmptyCheck() {
-
-    }
-
-    /*private static List<Field> returnWinStrategList() {
-        Board board = new Board();
-        List<Field> winStrategs = new ArrayList<>();
-        winStrategs.add(board.getField(new Position(1)));
-        winStrategs.add(board.getField(new Position(2)));
-        winStrategs.add(board.getField(new Position(3)));
-
-        return winStrategs;
-    }
-
-
-    @ParameterizedTest
-    @MethodSource("returnWinStrategList")
-    void winStrategComputerEmptyCheck() {
-        Board board = new Board();
-
-        assertTrue(Computer.computerWin(board).equals(returnPositionsCheckstream()));
-
-
-    }
-
-    private static Stream<Arguments> returnPositionsCheckstream() {
-        return Stream.of(
-                Arguments.of(new Board(), new Position(5)),
-                Arguments.of(getBoard(List.of(1)), new Position(5)),
-                Arguments.of(getBoard(List.of(5)), new Position(5))
-
-        );
-    }*/
-
-
-   /* @ParameterizedTest
-    @MethodSource("returnPositionsCheckstream")
-    void returnPositionCheck(Board board, Position position) {
-        Position position1 = (Computer.getComputerMovement(board));
-        System.out.println(position1.getIndex());
-        System.out.println(position.getIndex());
-
-        assertEquals(position1, position);
-
-
-    }
-*/
-    /*@Test
-    void test() {
-        Board board = new Board();
-        while (true) {
-            Position position = Computer.getComputerMovement(board);
-            board.getField(new Position(1)).setGameCharacter('♡');
-            board.getField(new Position(5)).setGameCharacter('¤');
-            board.getField(new Position(2)).setGameCharacter('♡');
-            board.getField(new Position(3)).setGameCharacter('¤');
-            board.getField(new Position(7)).setGameCharacter('♡');
-
-
-            if (position.getIndex() != 4) {
-                System.out.println(position.getIndex());
+    void randomPositionTest() {
+        for (int i = 1; i <= 9; i++) {
+            if (i != 8 && i != 9) {
+                board.getField(new Position(i)).setGameCharacter('♡');
             }
-
-
         }
-    }*/
+        Position computerMovement = Computer.getComputerMovement(board);
+        assertTrue(computerMovement.getIndex() == 9 || computerMovement.getIndex() == 8);
+    }
 
-    /*@Test
-    void test2() {
-        Board board = new Board();
-        while (true) {
-            Position position = Computer.getComputerMovement(board);
-            board.getField(new Position(5)).setGameCharacter('♡');
-            board.getField(new Position(3)).setGameCharacter('¤');
-            board.getField(new Position(1)).setGameCharacter('♡');
-
-
-            System.out.println(position.getIndex());
-
-
+    @Test
+    void computerDrawTest() {
+        for (int i = 1; i <= 9; i++) {
+            if (i % 2 == 0) {
+                board.getField(new Position(i)).setGameCharacter('♡');
+            } else {
+                board.getField(new Position(i)).setGameCharacter('¤');
+            }
         }
-    }*/
-    /*@Test
-    void test3(){
-       Integer[][] positions = {{1,2,3},{4,5,6},{7,8,9}};
-
-        for (Integer[] i : positions) {
-            Arrays.stream(i).forEach(j -> Arrays.stream(i).forEach(k -> {
-                Arrays.stream(i).filter(l -> j != k && k != l && l != j).map(l -> "test " + j + " . " + k + " . " + l).forEach(System.out::println);
-            }));
-        }
-    }*/
+        Position computerMovement = Computer.getComputerMovement(board);
+        assertNull(computerMovement);
+        assertTrue(Computer.draw);
+    }
 
 
 }

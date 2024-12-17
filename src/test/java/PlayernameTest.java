@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +14,6 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -178,11 +178,15 @@ public class PlayernameTest {
     }
 
     @Test
-    void shouldName() {
-        String simulatedInput = "pikachu@@@\n";
-        Scanner testScanner = new Scanner(new ByteArrayInputStream(simulatedInput.getBytes()));
+    void shouldName() throws SQLException, IOException {
         Playername.name = "pikachu@@@";
-        assertThrows(SQLException.class, () -> Playername.askPlayername(testScanner));
+        Playername.nameCheck();
+        String simulatedInput2 = "no\n";
+        Scanner testScanner2 = new Scanner(new ByteArrayInputStream(simulatedInput2.getBytes()));
+
+
+        assertEquals("pikachu", Playername.name);
+
     }
 }
 

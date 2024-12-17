@@ -37,16 +37,24 @@ public class Playername {
 
     }
 
-    public static boolean askPlayername(Scanner scScanner) throws IOException, SQLException {
-        System.out.println("^~^ Bitte geben Sie einen Namen ein:");
-        name = scScanner.nextLine();
+    public static boolean nameCheck() throws SQLException, IOException {
 
         for (String input : inputcheck) {
             if (name.contains(input) || name.length() > 32) {
                 System.out.println("Dein Name ist zu lang oder enthält unerlaubte Symbole -^^,--,~");
-                return askPlayername(scScanner);
+                Login.ask();
+                return false;
             }
         }
+
+        return true;
+    }
+
+    public static boolean askPlayername(Scanner scScanner) throws IOException, SQLException {
+        System.out.println("^~^ Bitte geben Sie einen Namen ein:");
+        name = scScanner.nextLine();
+
+        nameCheck();
 
         try (Connection connection = ConnectionHandler.getConnection()) {
 
