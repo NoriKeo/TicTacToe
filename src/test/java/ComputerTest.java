@@ -1,7 +1,9 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 class ComputerTest {
 
@@ -25,7 +27,8 @@ class ComputerTest {
 
     @Test
     void computerTestwinMove() {
-
+        Board board = new Board();
+        Match.match = 6;
         board.getField(new Position(5)).setGameCharacter('¤');
         board.getField(new Position(4)).setGameCharacter('¤');
         Position computerMovement = Computer.getComputerMovement(board);
@@ -47,6 +50,7 @@ class ComputerTest {
 
     @Test
     void computerDrawTest() {
+        Match.match = 6;
         for (int i = 1; i <= 9; i++) {
             if (i % 2 == 0) {
                 board.getField(new Position(i)).setGameCharacter('♡');
@@ -55,9 +59,18 @@ class ComputerTest {
             }
         }
         Position computerMovement = Computer.getComputerMovement(board);
-        assertNull(computerMovement);
-        assertTrue(Computer.draw);
+        Assertions.assertNull(computerMovement);
+        assertEquals(false, !Computer.draw);
     }
+
+    @Test
+    void computerMoveTestDiagonal() {
+        board.getField(new Position(1)).setGameCharacter('¤');
+        board.getField(new Position(9)).setGameCharacter('¤');
+        Position computerMovement = Computer.getComputerMovement(board);
+        assertEquals(5, computerMovement.getIndex());
+    }
+    
 
 
 }
