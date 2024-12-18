@@ -43,7 +43,7 @@ public class Match {
         }
         do {
             t1 = System.currentTimeMillis();
-            input = Player.getInstance().askInput(board);
+            input = Player.getInstance().askInput(board, Player.scScanner);
             //input = Player.getInstance().test(board);
             position = new Position(input);
             board.getRows().get(position.getRow()).getFields().get(position.getColumn()).setGameCharacter('♡');

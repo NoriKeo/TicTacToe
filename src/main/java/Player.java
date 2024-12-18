@@ -17,7 +17,7 @@ public class Player {
     }
 
 
-    public int askInput(Board board) {
+    public int askInput(Board board, Scanner scScanner) {
         int input2 = 0;
         String input = "";
         System.out.println("♥ Gebe eine Zahl ein oder i für Info ♥");
@@ -42,10 +42,10 @@ public class Player {
             System.out.println("(¯`·.¸¸.-> °ºDas Feld ist leider schon vergebenº° >-.¸¸.·`¯(");
             //String input = sc.nextLine();
             //input2 = Integer.parseInt(input);
-            input2 = askInput(board);
+            input2 = askInput(board, scScanner);
         }
         if (INPUTS.contains(input)) {
-            input2 = askInput(board);
+            input2 = askInput(board, scScanner);
         }
 
         return input2;

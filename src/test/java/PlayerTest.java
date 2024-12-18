@@ -2,7 +2,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,10 +23,33 @@ class PlayerTest {
 
     @Test
     public void inputValideTest() {
-        String input = "5\n";
-        InputStream stream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(stream);
-        int input2 = player.askInput(board);
+
+        String simulatedInput = "5\n";
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(simulatedInput.getBytes()));
+        int input2 = player.askInput(board, testScanner);
         assertEquals(input2, 5);
     }
+
+    @Test
+    public void inputFieldTakenTest() {
+        board.getField(new Position(5)).setGameCharacter('¤');
+        String simulatedInput = "5\n3\n";
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(simulatedInput.getBytes()));
+        int input2 = player.askInput(board, testScanner);
+        assertEquals(input2, 3);
+    }
+
+    @Test
+    public void inputInvalideTest() {
+        String simulatedInput = "x\n6\n";
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(simulatedInput.getBytes()));
+        int input2 = player.askInput(board, testScanner);
+        assertEquals(input2, 6);
+    }
+
+
+
+
+
+
 }

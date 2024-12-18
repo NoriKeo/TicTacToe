@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Infofield {
@@ -10,6 +11,7 @@ public class Infofield {
     private final Print printi;
     static boolean scoreprint = false;
     private static Infofield INSTANCE;
+    Scanner scanner;
 
     private Infofield(UserInputOutputService userInputOutputService, Print print) {
         this.userIOService = userInputOutputService;
@@ -57,6 +59,6 @@ public class Infofield {
             return;
         }
 
-        Player.getInstance().askInput(board);
+        Player.getInstance().askInput(board, Player.scScanner);
     }
 }
